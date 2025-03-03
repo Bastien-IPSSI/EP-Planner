@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
 
-function App() {
+const App = () => {
+  const [controllerName, setControllerName] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/controller-name')
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setControllerName(data.controller_name);
+      })
+      .catch((error) => {
+        console.log("error");
+        console.error('Erreur lors de la récupération du nom du contrôleur:', error);
+      });
+  }, []);
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Nom du contrôleur : {controllerName}</h1>
     </div>
   );
-}
+};
 
 export default App;
