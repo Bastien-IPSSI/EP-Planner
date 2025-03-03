@@ -13,7 +13,7 @@ final class TestController extends AbstractController
     public function getControllerName(): JsonResponse
     {
         return new JsonResponse(
-            ['controller_name' => 'TestController'],
+            ['controller_name' => 'toto'],
             200,
             ['Content-Type' => 'application/json']
         );
