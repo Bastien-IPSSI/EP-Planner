@@ -3,30 +3,30 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
 const CustomNavbar = () => {
-  // États pour gérer les informations utilisateur et l'authentification
+  
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('user');
 
   useEffect(() => {
-    // Exemple d'appel API pour récupérer les informations utilisateur
+
     fetch('/api/user', { 
       method: 'GET', 
-      credentials: 'include' // Assurez-vous d'inclure les cookies ou le token d'authentification
+      credentials: 'include' 
     })
       .then(response => response.json())
       .then(data => {
         if (data.isAuthenticated) {
-          setIsLoggedIn(true); // L'utilisateur est connecté
-          setUsername(data.name); // Nom de l'utilisateur récupéré
-          setIsAdmin(data.role === 'Admin'); // Détermine si l'utilisateur est admin
+          setIsLoggedIn(true); 
+          setUsername(data.name); 
+          setIsAdmin(data.role === 'Admin'); 
         } else {
           setIsLoggedIn(false);
         }
       })
       .catch(err => {
         console.error('Erreur lors de la récupération des données utilisateur:', err);
-        setIsLoggedIn(false); // Si l'appel échoue, on considère que l'utilisateur n'est pas connecté
+        setIsLoggedIn(false); 
       });
   }, []);
 
