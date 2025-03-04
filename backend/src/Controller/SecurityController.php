@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controller;
+// App\Controller\SecurityController.php
+namespace App\Controller;
 
 use App\Entity\User;
 use Firebase\JWT\JWT;
@@ -27,46 +29,45 @@ class SecurityController extends AbstractController
     #[Route('/api/login', name: 'app_login', methods: ['POST'])]
     public function login(Request $request): JsonResponse
     {
+        // Extraction des données JSON de la requête
         $data = json_decode($request->getContent(), true);
-        
-        
+
         if (!$data) {
             return new JsonResponse(['message' => 'Bad JSON format'], Response::HTTP_BAD_REQUEST);
         }
 
-        $email = $data['email'] ?? null;
-        $password = $data['password'] ?? null;
+        // Récupération de l'email et du mot de passe
+        $mail = $data['mail'] ?? null; 
+        $mdp = $data['mdp'] ?? null;
 
-        if (!$email || !$password) {
+        if (!$mail || !$mdp) {
             return new JsonResponse(['message' => 'Email et mot de passe sont requis'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Récupération de l'utilisateur dans la base de données
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        // Récupérer l'utilisateur en fonction de l'email
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['mail' => $mail]);
 
-        // Si l'utilisateur n'existe pas ou si le mot de passe est incorrect
-        if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
+        if (!$user || !$this->passwordHasher->isPasswordValid($user, $mdp)) {
             return new JsonResponse(['message' => 'Email ou mot de passe incorrect'], Response::HTTP_UNAUTHORIZED);
         }
 
+        // Clé secrète pour signer le JWT (assurez-vous que c'est sécurisé et stocké dans .env)
+        $key = $_ENV['JWT_SECRET_KEY'];
 
-        $key = $_ENV['JWT_SECRET_KEY']; 
-
-        // Créer la charge utile pour le JWT
+        // Générer la charge utile pour le JWT
         $payload = [
-            'email' => $user->getEmail(),
+            'mail' => $user->getMail(),
             'roles' => $user->getRoles(),
             'exp' => time() + 3600, // Expire dans 1 heure
         ];
 
         try {
-          
             $jwt = JWT::encode($payload, $key, 'HS256');
         } catch (\Exception $e) {
             return new JsonResponse(['message' => 'Erreur lors de la génération du token', 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
- 
+        // Créer le cookie contenant le JWT
         $cookie = new Cookie(
             'auth_token',    // Nom du cookie
             $jwt,            // Contenu du JWT

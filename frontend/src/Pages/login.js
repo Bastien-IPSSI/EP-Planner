@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [mail, setMail] = useState('');
+  const [mdp, setMdp] = useState('');
   const [error, setError] = useState(null);
 
   const handleSubmit = async (event) => {
@@ -12,8 +12,9 @@ const Login = () => {
     try {
       const response = await fetch('http://localhost:8000/api/login', {
         method: 'POST',
+    
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ mail, mdp }),
         credentials: 'include'  
       });
 
@@ -37,16 +38,16 @@ const Login = () => {
         <label>Email:</label>
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={mail}
+          onChange={(e) => setMail(e.target.value)}
           required
         />
         <br />
         <label>Mot de passe:</label>
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={mdp}
+          onChange={(e) => setMdp(e.target.value)}
           required
         />
         <br />

@@ -2,83 +2,109 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */   private ?int $id = null;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private ?string $email = null;
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private ?string $password = null;
+    #[ORM\Column(length: 255)]
+    private ?string $prenom = null;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private array $roles = [];
+    #[ORM\Column(length: 255)]
+    private ?string $mail = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $mdp = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $role = null;
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Employe $employe = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getNom(): ?string
     {
-        return $this->email;
+        return $this->nom;
     }
 
-    public function setEmail(string $email): self
+    public function setNom(string $nom): static
     {
-        $this->email = $email;
+        $this->nom = $nom;
+
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->password;
+        return $this->prenom;
     }
 
-    public function setPassword(string $password): self
+    public function setPrenom(string $prenom): static
     {
-        $this->password = $password;
+        $this->prenom = $prenom;
+
         return $this;
     }
 
-    public function getRoles(): array
+    public function getMail(): ?string
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
+        return $this->mail;
     }
 
-    public function setRoles(array $roles): self
+    public function setMail(string $mail): static
     {
-        $this->roles = $roles;
+        $this->mail = $mail;
+
         return $this;
     }
 
-    public function eraseCredentials(): void
+    public function getMdp(): ?string
     {
-        // Clear sensitive data if necessary
+        return $this->mdp;
     }
 
-    public function getUserIdentifier(): string
+    public function setMdp(string $mdp): static
     {
-        return $this->email;
+        $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): static
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getEmploye(): ?Employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?Employe $employe): static
+    {
+        $this->employe = $employe;
+
+        return $this;
     }
 }
