@@ -1,6 +1,7 @@
 # Cache et logs (Symfony)
 backend/var/cache/
 backend/var/logs/
+backend/var/log/dev.log
 backend/var/sessions/
 !backend/var/cache/.gitkeep
 !backend/var/logs/.gitkeep
@@ -13,8 +14,6 @@ backend/.env.dev
 
 # Fichiers gérés par Composer
 backend/vendor/
-backend/bin/
-!backend/bin/console
 !backend/bin/symfony_requirements
 
 # Assets et uploads
