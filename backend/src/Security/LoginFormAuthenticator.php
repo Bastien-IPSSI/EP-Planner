@@ -82,18 +82,13 @@ class LoginFormAuthenticator extends AbstractAuthenticator
         );
 
         // Créer la réponse avec le cookie
-        $response = new JsonResponse([
-            'message' => 'Login successful',
-            'roles' => $user->getRoles(),
+        return new JsonResponse(['message' => 'Login successful', 'token' => $jwt], Response::HTTP_OK, [
+            'Set-Cookie' => $cookie->__toString()
         ]);
-        $response->headers->setCookie($cookie); // Ajouter le cookie à la réponse
-
-        return $response;
     }
 
-    // Si l'authentification échoue, renvoie un message d'erreur
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new JsonResponse(['message' => 'Email ou mot de passe incorrect'], Response::HTTP_UNAUTHORIZED);
+        return new JsonResponse(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
     }
 }

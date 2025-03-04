@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import Login from './Pages/login';
 
 const App = () => {
-  const [controllerName, setControllerName] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/controller-name')
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setControllerName(data.controller_name);
-      })
-      .catch((error) => {
-        console.log("error");
-        console.error('Erreur lors de la récupération du nom du contrôleur:', error);
-      });
-  }, []);
-  
-
   return (
     <div>
-      <h1>Nom du contrôleur : {controllerName}</h1>
+      {/* Ajoute uniquement le composant Login ici */}
+      <Login />
     </div>
   );
 };
