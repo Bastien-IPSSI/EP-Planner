@@ -1,4 +1,4 @@
-import ChantierForm from "../components/chantier/ChantierForm";
+import ChantierForm from "../Components/chantier/ChantierForm";
 
 const Chantier = () => {
     return (
@@ -10,7 +10,7 @@ const Chantier = () => {
                 </ul>
             </nav>
             <div className="container p-3 bg-light" style={{ height: "90vh" }}>
-                <ChantierForm />
+            <ChantierForm/>
             </div>
         </div>
     );
