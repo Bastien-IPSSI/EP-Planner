@@ -2,83 +2,111 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+class User
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */   private ?int $id = null;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private ?string $email = null;
+    #[ORM\Column(length: 255)]
+    private ?string $nom = null;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    private ?string $password = null;
+    #[ORM\Column(length: 255)]
+    private ?string $prenom = null;
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(length: 255)]
+    private ?string $mail = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $mdp = null;
+
+    #[ORM\Column(type: 'json')]  // Utilisation d'un tableau JSON pour les rôles
     private array $roles = [];
+
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Employe $employe = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getNom(): ?string
     {
-        return $this->email;
+        return $this->nom;
     }
 
-    public function setEmail(string $email): self
+    public function setNom(string $nom): static
     {
-        $this->email = $email;
+        $this->nom = $nom;
+
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->password;
+        return $this->prenom;
     }
 
-    public function setPassword(string $password): self
+    public function setPrenom(string $prenom): static
     {
-        $this->password = $password;
+        $this->prenom = $prenom;
+
         return $this;
     }
 
+    public function getMail(): ?string
+    {
+        return $this->mail;
+    }
+
+    public function setMail(string $mail): static
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    public function getMdp(): ?string
+    {
+        return $this->mdp;
+    }
+
+    public function setMdp(string $mdp): static
+    {
+        $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    // Modification de la méthode getRoles pour retourner un tableau
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
-        return array_unique($roles);
+        return $this->roles ?: ['ROLE_USER'];  // Si aucun rôle, on donne un rôle par défaut
     }
 
-    public function setRoles(array $roles): self
+    // Mise à jour pour permettre de définir plusieurs rôles
+    public function setRoles(array $roles): static
     {
         $this->roles = $roles;
+
         return $this;
     }
 
-    public function eraseCredentials(): void
+    public function getEmploye(): ?Employe
     {
-        // Clear sensitive data if necessary
+        return $this->employe;
     }
 
-    public function getUserIdentifier(): string
+    public function setEmploye(?Employe $employe): static
     {
-        return $this->email;
+        $this->employe = $employe;
+
+        return $this;
     }
 }

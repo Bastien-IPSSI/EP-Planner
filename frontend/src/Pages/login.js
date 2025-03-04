@@ -1,59 +1,58 @@
+// src/components/Login.js
+
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(null);
+    const [mail, setMail] = useState('');
+    const [mdp, setMdp] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setError(null);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    try {
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-        credentials: 'include'  
-      });
+        try {
+            const response = await axios.post('http://localhost:8000/login', {
+                mail: mail,
+                mdp: mdp
+            });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
+            // Si la connexion est réussie, on peut rediriger ou afficher un message
+            alert('Login successful!');
+            console.log(response.data);
 
-      alert('Connexion réussie !');
-      window.location.href = '/dashboard'; 
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+            // Ici, tu peux aussi sauvegarder le token dans localStorage ou un state global si besoin.
+            document.cookie = `AUTH_TOKEN=${response.data.token}; path=/;`;
 
-  return (
-    <div>
-      <h2>Login</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <br />
-        <label>Mot de passe:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <br />
-        <button type="submit">Se connecter</button>
-      </form>
-    </div>
-  );
+        } catch (error) {
+            setErrorMessage('Invalid credentials');
+            console.error(error);
+        }
+    };
+
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <label>Mail:</label>
+                <input 
+                    type="email" 
+                    value={mail} 
+                    onChange={(e) => setMail(e.target.value)} 
+                    required
+                />
+                <label>Mot de passe:</label>
+                <input 
+                    type="password" 
+                    value={mdp} 
+                    onChange={(e) => setMdp(e.target.value)} 
+                    required
+                />
+                <button type="submit">Connexion</button>
+            </form>
+
+            {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        </div>
+    );
 };
 
 export default Login;
