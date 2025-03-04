@@ -1,5 +1,8 @@
 import { useState } from "react";
 import BesoinChantier from "./BesoinChantier";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import AffectationChantier from "./AffectationChantier";
 
 const ChantierForm = () => {
     const [formData, setFormData] = useState({
@@ -9,9 +12,9 @@ const ChantierForm = () => {
         dateFin: "",
         statut: "En cours",
         besoinChantier: [],
+        affectations: [],
     });
 
-    // Gérer les changements des champs du formulaire principal
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -20,7 +23,6 @@ const ChantierForm = () => {
         }));
     };
 
-    // Ajouter un besoin de chantier
     const handleAddBesoin = (besoin) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -28,7 +30,6 @@ const ChantierForm = () => {
         }));
     };
 
-    // Supprimer un besoin chantier
     const handleRemoveBesoin = (index) => {
         setFormData((prevData) => ({
             ...prevData,
@@ -36,11 +37,24 @@ const ChantierForm = () => {
         }));
     };
 
-    // Soumettre le formulaire
+    const handleAddAffectation = (affectation) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            affectations: [...prevData.affectations, affectation],
+        }));
+    };
+
+    const handleRemoveAffectation = (index) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            affectations: prevData.affectations.filter((_, i) => i !== index),
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Form Data:", formData);
-        // Envoyer `formData` vers ton API via `fetch` ou `axios`
+        // TODO requete API submit
     };
 
     return (
@@ -109,23 +123,43 @@ const ChantierForm = () => {
                 <h2>Besoins du chantier :</h2>
                 <div className="d-flex flex-wrap">
                     {formData.besoinChantier.map((besoin, index) => (
-                        <div key={index} className="border p-2 m-2 d-flex justify-content-between">
-                            <div>
-                                <p><strong>Spécialité :</strong> {besoin.speciality}</p>
-                                <p><strong>Nombre :</strong> {besoin.number}</p>
+                        <div key={index} className="border p-4 m-2 d-flex justify-content-between position-relative">
+                            <div className="me-2">
+                                <div><strong>Spécialité :</strong> {besoin.speciality}</div>
+                                <div><strong>Nombre :</strong> {besoin.number}</div>
                             </div>
                             <button
-                                className="btn btn-danger text-white text-center"
+                                className="btn p-0 position-absolute top-0 end-0"
                                 style={{ width: "30px", height: "30px" }}
                                 onClick={() => handleRemoveBesoin(index)}
                             >
-                                X
+                                <FontAwesomeIcon icon={faTrash} />
                             </button>
                         </div>
                     ))}
                 </div>
 
                 <BesoinChantier onAddBesoin={handleAddBesoin} />
+
+                <h2>Affecations :</h2>
+                <div className="d-flex flex-wrap">
+                    {formData.affectations.map((affectation, index) => (
+                        <div key={index} className="border p-4 m-2 d-flex justify-content-between position-relative">
+                            <div className="me-2">
+                                <div><strong>Employe :</strong>{affectation.name} ({affectation.specialite})</div>
+                            </div>
+                            <button
+                                className="btn p-0 position-absolute top-0 end-0"
+                                style={{ width: "30px", height: "30px" }}
+                                onClick={() => handleRemoveAffectation(index)}
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <AffectationChantier onAddAffectation={handleAddAffectation} besoins={formData.besoinChantier} />
 
                 <button type="submit" className="btn btn-primary mt-3">Valider</button>
             </form>
