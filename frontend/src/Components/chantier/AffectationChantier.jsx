@@ -8,7 +8,6 @@ const AffectationChantier = ({ onAddAffectation, besoins }) => {
         fetch("http://localhost:8000/api/admin/employes")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 setEmployes(data);
             })
             .catch((error) => console.error("Erreur API :", error));
@@ -67,7 +66,7 @@ const AffectationChantier = ({ onAddAffectation, besoins }) => {
                 </select>
             </div>
 
-            <button className="btn btn-success mt-3" onClick={handleAdd}>Ajouter une affectation</button>
+            <button type="button" className="btn btn-success mt-3" onClick={handleAdd}>Ajouter une affectation</button>
         </div>
     );
 };

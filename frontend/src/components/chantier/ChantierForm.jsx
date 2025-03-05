@@ -15,6 +15,10 @@ const ChantierForm = () => {
         affectations: [],
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [popupMessage, setPopupMessage] = useState("");
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -51,10 +55,42 @@ const ChantierForm = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form Data:", formData);
-        // TODO requete API submit
+        setIsSubmitting(true);
+    
+        try {
+            const response = await fetch("http://localhost:8000/api/admin/chantier/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setPopupMessage("Chantier enregistré avec succès!");
+            setShowPopup(true);
+            setFormData({
+                nom: "",
+                lieu: "",
+                dateDebut: "",
+                dateFin: "",
+                statut: "En cours",
+                besoinChantier: [],
+                affectations: [],
+            });
+        } catch (error) {
+            console.error("Erreur API :", error);
+            setPopupMessage("Une erreur est survenue lors de l'enregistrement du chantier.");
+            setShowPopup(true);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -129,6 +165,7 @@ const ChantierForm = () => {
                                 <div><strong>Nombre :</strong> {besoin.number}</div>
                             </div>
                             <button
+                                type="button"
                                 className="btn p-0 position-absolute top-0 end-0"
                                 style={{ width: "30px", height: "30px" }}
                                 onClick={() => handleRemoveBesoin(index)}
@@ -149,6 +186,7 @@ const ChantierForm = () => {
                                 <div><strong>Employe :</strong>{affectation.name} ({affectation.specialite})</div>
                             </div>
                             <button
+                                type="button"
                                 className="btn p-0 position-absolute top-0 end-0"
                                 style={{ width: "30px", height: "30px" }}
                                 onClick={() => handleRemoveAffectation(index)}
@@ -161,8 +199,25 @@ const ChantierForm = () => {
 
                 <AffectationChantier onAddAffectation={handleAddAffectation} besoins={formData.besoinChantier} />
 
-                <button type="submit" className="btn btn-primary mt-3">Valider</button>
+                <button disabled={isSubmitting} type="submit" className="btn btn-primary mt-3">
+                    {isSubmitting ? "En cours..." : "Enregistrer"}
+                </button>
             </form>
+            {showPopup && (
+                <div className="modal fade show d-block" tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Notification</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowPopup(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                <p>{popupMessage}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
