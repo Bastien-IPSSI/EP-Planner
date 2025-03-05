@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
-import Login from './Pages/login';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+import Login from './Components/Login';
+import Layout from './Components/Layout';
 
 import Chantiers from './Pages/admin/chantiers/Chantiers';
 import CreateChantier from './Pages/admin/chantiers/CreateChantier';
@@ -13,36 +16,105 @@ import OuvrierInfo from './Pages/admin/ouvriers/OuvrierInfo';
 import UserChantiers from './Pages/user/chantiers/UserChantiers';
 import UserChantier from './Pages/user/chantiers/UserChantier';
 
+import { UserProvider, useUser } from './UserContext';
 
-import { BrowserRouter, Routes, Route, createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
-import Layout from './Components/Layout';
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const { user, isLoading } = useUser();
 
-// import CustomNavbar from './Components/Nav';
+  if (isLoading) {
+    return <div>Chargement...</div>; // Ou un composant de chargement
+  }
 
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (requiredRole && user.role !== requiredRole) {
+    return <Navigate to="/chantiers" replace />;
+  }
+
+  return children;
+};
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='login' element={<Login/>}/>
-        <Route element={<Layout/>}>
-        {/* Protected Routes */}
-          <Route path='/admin/chantiers' element={<Chantiers/>}/>
-          <Route path='/admin/chantiers/new' element={<CreateChantier/>}/>
-          <Route path='/admin/chantiers/:id' element={<ChantierInfo/>}/>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route element={<Layout />}>
+            {/* Routes protégées pour ADMIN */}
+            <Route
+              path='/admin/chantiers'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <Chantiers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin/chantiers/new'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <CreateChantier />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin/chantiers/:id'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <ChantierInfo />
+                </ProtectedRoute>
+              }
+              />
 
-          <Route path='/admin/ouvriers' element={<Ouvriers/>}/>
-          <Route path='/admin/ouvriers/new' element={<CreateOuvrier/>}/>
-          <Route path='/admin/ouvriers/:id' element={<OuvrierInfo/>}/>
-        {/* Protected Routes */}
+            <Route
+              path='/admin/ouvriers'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <Ouvriers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/admin/ouvriers/new'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <CreateOuvrier />
+                </ProtectedRoute>
+              }
+              />
+            <Route
+              path='/admin/ouvriers/:id'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <OuvrierInfo />
+                </ProtectedRoute>
+              }
+              />
 
-        <Route path='/chantiers' element={<UserChantiers/>}/>        
-        <Route path='/chantiers/:id' element={<UserChantier/>}/>        
-        </Route>
-      </Routes>
-    </BrowserRouter>
-
-
+            {/* Routes protégées pour UTILISATEUR (ouvrier) */}
+            <Route
+              path='/chantiers'
+              element={
+                <ProtectedRoute requiredRole="ROLE_USER">
+                  <UserChantiers />
+                </ProtectedRoute>
+              }
+              />
+            <Route
+              path='/chantiers/:id'
+              element={
+                <ProtectedRoute requiredRole="ROLE_USER">
+                  <UserChantier />
+                </ProtectedRoute>
+              }
+              />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 };
 

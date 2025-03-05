@@ -28,7 +28,13 @@ class AuthController extends AbstractController
         $session = $request->getSession();
         $session->set('user_id', $user->getId());
 
-        return $this->json(['message' => 'Connexion réussie']);
+        return $this->json(["user" => [
+                'mail' => $user->getMail(),
+                'nom' => $user->getNom(),
+                'prenom' => $user->getPrenom(),
+                'role' => $user->getRole()
+            ]
+        ]);
     }
 
     #[Route('/api/logout', name: 'api_logout', methods: ['POST'])]
@@ -51,12 +57,13 @@ class AuthController extends AbstractController
         }
 
         $user = $userRepository->find($userId);
-        return $this->json([
+        return $this->json(["user" => [
             'mail' => $user->getMail(),
             'nom' => $user->getNom(),
             'prenom' => $user->getPrenom(),
             'role' => $user->getRole()
-        ]);
+        ]
+    ]);
     }
 
 }

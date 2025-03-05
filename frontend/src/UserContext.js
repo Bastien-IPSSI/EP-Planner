@@ -9,6 +9,7 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
+
     useEffect(() => {
         fetch("http://localhost:8000/api/me", { credentials: "include" })
             .then((res) => res.json())
@@ -17,7 +18,7 @@ export const UserProvider = ({ children }) => {
                     setUser(data);
                 }
             })
-            .catch(() => console.log("Non connecté"));
+            .catch(() => console.log("Non connecté"))
     }, []);
 
     const login = (userData) => {
