@@ -10,21 +10,19 @@ class Affectation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column]
     private ?\DateTimeImmutable $date = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\ManyToOne(targetEntity: Employe::class, inversedBy: 'affectations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'affectation')]
     private ?Employe $employe = null;
 
-    #[ORM\ManyToOne(targetEntity: Chantier::class, inversedBy: 'affectations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'affectations')]
     private ?Chantier $chantier = null;
 
     public function getId(): ?int
@@ -40,6 +38,7 @@ class Affectation
     public function setDate(\DateTimeImmutable $date): static
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -51,6 +50,7 @@ class Affectation
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -62,6 +62,7 @@ class Affectation
     public function setEmploye(?Employe $employe): static
     {
         $this->employe = $employe;
+
         return $this;
     }
 
@@ -73,6 +74,7 @@ class Affectation
     public function setChantier(?Chantier $chantier): static
     {
         $this->chantier = $chantier;
+
         return $this;
     }
 }

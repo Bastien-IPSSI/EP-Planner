@@ -19,8 +19,8 @@ class Employe
     #[ORM\Column]
     private ?bool $dispo = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $skills = null; 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]  // Changement de ARRAY à TEXT
+    private ?string $skills = null;  // Changement de array à string
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -56,19 +56,21 @@ class Employe
         return $this;
     }
 
-    // Récupérer les compétences sous forme de tableau en désérialisant la chaîne JSON
+    // Modification de la méthode getSkills
+    // Désérialisation JSON pour convertir la chaîne en tableau
     public function getSkills(): ?array
     {
-        return $this->skills ? json_decode($this->skills, true) : null;
+        return $this->skills ? json_decode($this->skills, true) : null;  // Désérialisation JSON
     }
-    
-    // Définir les compétences sous forme de chaîne JSON
+
+    // Modification de la méthode setSkills
+    // Sérialisation du tableau en chaîne JSON
     public function setSkills(?array $skills): static
     {
-        $this->skills = $skills ? json_encode($skills) : null; // Sérialiser le tableau en chaîne JSON
+        $this->skills = $skills ? json_encode($skills) : null;  // Sérialisation en JSON
         return $this;
     }
-    
+
     public function getUser(): ?User
     {
         return $this->user;

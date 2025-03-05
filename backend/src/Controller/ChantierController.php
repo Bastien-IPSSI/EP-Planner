@@ -22,6 +22,7 @@ final class ChantierController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+    // Endpoint pour soumettre un chantier
     #[Route('/api/admin/chantier/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
     public function submitChantier(Request $request): JsonResponse
     {
@@ -80,24 +81,25 @@ final class ChantierController extends AbstractController
         }
     }
 
+    // Endpoint pour récupérer les chantiers d'un employé
     #[Route('/api/employe/{id}/chantiers', name: 'api_employe_chantiers', methods: ['GET'])]
     public function getChantiersByEmploye($id): JsonResponse
     {
-       
+        // Récupérer l'employé par son ID
         $employe = $this->entityManager->getRepository(Employe::class)->find($id);
 
         if (!$employe) {
             return new JsonResponse(['error' => 'Employé non trouvé'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-       
+        // Récupérer les affectations de l'employé
         $affectations = $this->entityManager->getRepository(Affectation::class)->findBy(['employe' => $employe]);
 
         if (empty($affectations)) {
             return new JsonResponse(['message' => 'Aucune affectation trouvée pour cet employé'], JsonResponse::HTTP_OK);
         }
 
-      
+        // Récupérer les chantiers associés aux affectations
         $chantiers = [];
         foreach ($affectations as $affectation) {
             $chantier = $affectation->getChantier();
