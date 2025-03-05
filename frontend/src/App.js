@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import './App.css';
+
+import React from 'react';
 import Chantier from './pages/chantier';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Employe from './pages/employe';
 
 const App = () => {
-
   return (
-    <div>
-      <Chantier />
-      <Employe/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/employe" element={<Employe />} />
+        <Route path="/chantier" element={<Chantier/>}/>
+      </Routes>
+    </Router>
+    
   );
 };
 

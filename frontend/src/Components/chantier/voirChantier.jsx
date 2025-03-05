@@ -1,4 +1,3 @@
-// src/Components/VoirChantier.jsx
 import React, { useEffect, useState } from 'react';
 
 const VoirChantier = ({ employeId }) => {
@@ -7,44 +6,39 @@ const VoirChantier = ({ employeId }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Récupération des chantiers associés à l'employé
     fetch(`/api/employe/${employeId}/chantiers`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         if (data.message) {
-          setError(data.message); // Affichage d'un message si aucun chantier n'est trouvé
+          setError(data.message);
         } else {
-          setChantiers(data); // Mise à jour des chantiers
+          setChantiers(data);
         }
         setLoading(false);
       })
-      .catch((error) => {
-        console.error('Erreur:', error);
+      .catch(() => {
         setError('Erreur lors de la récupération des chantiers');
         setLoading(false);
       });
-  }, [employeId]); // Déclenche l'appel API à chaque fois que l'ID de l'employé change
+  }, [employeId]);
 
-  // Affichage pendant le chargement
-  if (loading) {
-    return <div>Chargement des chantiers...</div>;
-  }
+  if (loading) return <div>Chargement...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
-      <h1>Chantiers de l'employé {employeId}</h1>
-      {error ? (
-        <p>{error}</p>
-      ) : (
-        <ul>
-          {chantiers.map((chantier) => (
-            <li key={chantier.id}>
-              <strong>{chantier.nom}</strong>
-              <p>{chantier.description}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <h2>Chantiers assignés</h2>
+      <ul>
+        {chantiers.map(chantier => (
+          <li key={chantier.id}>
+            <strong>{chantier.nom}</strong>
+            <p>Lieu: {chantier.lieu}</p>
+            <p>Début: {chantier.date_debut}</p>
+            <p>Fin: {chantier.date_fin}</p>
+            <p>Statut: {chantier.statut}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

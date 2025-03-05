@@ -15,10 +15,9 @@ class ChantierController extends AbstractController
      */
     public function getChantiers($id, EntityManagerInterface $em)
     {
-        // On récupère toutes les affectations pour cet employé
         $affectations = $em->getRepository(Affectation::class)
             ->createQueryBuilder('a')
-            ->leftJoin('a.chantier', 'c') // Joindre la table chantier
+            ->leftJoin('a.chantier', 'c')
             ->addSelect('c')
             ->where('a.employe = :employe_id')
             ->setParameter('employe_id', $id)
@@ -29,16 +28,17 @@ class ChantierController extends AbstractController
             return new JsonResponse(['message' => 'Aucun chantier trouvé pour cet employé.'], JsonResponse::HTTP_OK);
         }
 
-        // On récupère les informations des chantiers
-        $chantierData = [];
-        foreach ($affectations as $affectation) {
+        $chantierData = array_map(function ($affectation) {
             $chantier = $affectation->getChantier();
-            $chantierData[] = [
+            return [
                 'id' => $chantier->getId(),
                 'nom' => $chantier->getNom(),
-                'description' => $chantier->getDescription(),
+                'lieu' => $chantier->getLieu(),
+                'date_debut' => $chantier->getDateDebut()->format('Y-m-d'),
+                'date_fin' => $chantier->getDateFin()->format('Y-m-d'),
+                'statut' => $chantier->getStatut(),
             ];
-        }
+        }, $affectations);
 
         return new JsonResponse($chantierData, JsonResponse::HTTP_OK);
     }
