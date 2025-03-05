@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -23,7 +25,7 @@ class User
     private ?string $mail = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $mdp = null;
+    private ?string $mdp = null; // Cette propriété sera utilisée pour le mot de passe
 
     #[ORM\Column(length: 255)]
     private ?string $role = null;
@@ -72,12 +74,12 @@ class User
         return $this;
     }
 
-    public function getMdp(): ?string
+    public function getPassword(): string
     {
-        return $this->mdp;
+        return $this->mdp; // Renvoie le mot de passe
     }
 
-    public function setMdp(string $mdp): static
+    public function setPassword(string $mdp): static
     {
         $this->mdp = $mdp;
 
@@ -106,5 +108,23 @@ class User
         $this->employe = $employe;
 
         return $this;
+    }
+
+    // Implémentation des méthodes de UserInterface
+    public function getRoles(): array
+    {
+        // Ajoute ici les rôles comme par exemple ['ROLE_USER', 'ROLE_ADMIN'] 
+        // selon la structure de ton application
+        return [$this->role ?? 'ROLE_USER']; // Par défaut, retourne "ROLE_USER"
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si tu stockes des informations sensibles, tu peux les effacer ici
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->mail; // Utilise le mail comme identifiant unique
     }
 }
