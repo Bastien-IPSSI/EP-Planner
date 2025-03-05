@@ -7,11 +7,12 @@ const VoirChantier = ({ employeId }) => {
 
   useEffect(() => {
     console.log(`Fetching chantiers for employeId: ${employeId}`);
-
-    fetch(`/api/employe/${employeId}/chantiers`)
+  
+    fetch(`http://localhost:8000/api/employe/${employeId}/chantiers`)  
       .then((response) => {
+        console.log('Response:', response);
         if (!response.ok) {
-          throw new Error('Erreur réseau ou serveur');
+          throw new Error(`Erreur réseau ou serveur: ${response.status}`);
         }
         return response.json();
       })
@@ -30,6 +31,7 @@ const VoirChantier = ({ employeId }) => {
         setLoading(false);
       });
   }, [employeId]);
+  
 
   if (loading) return <div>Chargement des chantiers...</div>;
   if (error) return <div>{error}</div>;
