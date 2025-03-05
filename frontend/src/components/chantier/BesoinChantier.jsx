@@ -21,7 +21,6 @@ const BesoinChantier = ({ onAddBesoin }) => {
         // Envoyer les valeurs au formulaire parent
         onAddBesoin({ speciality: selectedSpeciality, number });
 
-        // Réinitialiser les champs
         setSelectedSpeciality("");
         setNumber("");
     };
@@ -39,7 +38,7 @@ const BesoinChantier = ({ onAddBesoin }) => {
                 >
                     <option value="">-- Sélectionner --</option>
                     {specialities.map((speciality, index) => (
-                        <option key={index} value={speciality}>{speciality}</option>
+                        <option key={index} value={speciality.id}>{speciality}</option>
                     ))}
                 </select>
             </div>
@@ -56,7 +55,7 @@ const BesoinChantier = ({ onAddBesoin }) => {
                 />
             </div>
 
-            <button className="btn btn-success mt-3" onClick={handleAdd}>Ajouter un besoin</button>
+            <button type="button" className="btn btn-success mt-3" onClick={handleAdd}>Ajouter un besoin</button>
         </div>
     );
 };
