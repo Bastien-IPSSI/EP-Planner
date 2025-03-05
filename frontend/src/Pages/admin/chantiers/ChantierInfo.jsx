@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import Spinner from "../../../Components/common/Spinner";
 
 function ChantierInfo() {
     const { id } = useParams();
     const [chantier, setChantier] = useState(null);
     const [besoins, setBesoins] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -17,18 +18,14 @@ function ChantierInfo() {
                 }
                 const data = await response.json();
                 setChantier(data);
-                setLoading(false);
+                setIsLoading(false);
                 console.log(data);
             } catch (error) {
                 setError(error.message);
-                setLoading(false);
+                setIsLoading(false);
             }
         };
 
-        fetchChantierInfo();
-    }, [id]);
-
-    useEffect(() => {
         const fetchBesoins = async () => {
             try {
                 const response = await fetch(`http://localhost:8000/api/admin/chantier/${id}/besoins`);
@@ -38,25 +35,29 @@ function ChantierInfo() {
                 const data = await response.json();
                 console.log(data);
                 setBesoins(data);
-                setLoading(false);
+                setIsLoading(false);
             } catch (error) {
                 setError(error.message);
-                setLoading(false);
+                setIsLoading(false);
             }
         };
 
+        fetchChantierInfo();
         fetchBesoins();
     }, [id]);
 
-    if (loading) return <div className="container p-3">Chargement...</div>;
+
+    if (isLoading) return <Spinner />;
     if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
-    if (!chantier) return <div className="container p-3">Chantier non trouvé</div>;
 
     return (
         <div className="container p-4 bg-light min-vh-100">
-            <div className="mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to="/admin/chantiers" className="btn btn-outline-primary">
-                 Retour aux chantiers
+                    Retour aux chantiers
+                </Link>
+                <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-primary">
+                    Modifier le chantier
                 </Link>
             </div>
             
@@ -110,7 +111,6 @@ function ChantierInfo() {
                 </div>
             </div>
 
-            {/* Section pour les équipes assignées */}
             <div className="card mt-4 shadow-sm">
                 <div className="card-header">
                     <h4 className="mb-0">Équipes assignées</h4>

@@ -1,7 +1,5 @@
 import { useState } from "react";
 import BesoinChantier from "./BesoinChantier";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import AffectationChantier from "./AffectationChantier";
 
 const ChantierForm = () => {
@@ -27,39 +25,13 @@ const ChantierForm = () => {
         }));
     };
 
-    const handleAddBesoin = (besoin) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            besoinChantier: [...prevData.besoinChantier, besoin],
-        }));
-    };
-
-    const handleRemoveBesoin = (index) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            besoinChantier: prevData.besoinChantier.filter((_, i) => i !== index),
-        }));
-    };
-
-    const handleAddAffectation = (affectation) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            affectations: [...prevData.affectations, affectation],
-        }));
-    };
-
-    const handleRemoveAffectation = (index) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            affectations: prevData.affectations.filter((_, i) => i !== index),
-        }));
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
     
         try {
+
+            console.log("formData: ", formData);
             const response = await fetch("http://localhost:8000/api/admin/chantier/submit", {
                 method: "POST",
                 headers: {
@@ -72,7 +44,6 @@ const ChantierForm = () => {
                 throw new Error(`Erreur HTTP: ${response.status}`);
             }
 
-            const data = await response.json();
             setPopupMessage("Chantier enregistré avec succès!");
             setShowPopup(true);
             setFormData({
@@ -156,49 +127,13 @@ const ChantierForm = () => {
                     </select>
                 </div>
 
-                <h2>Besoins du chantier :</h2>
-                <div className="d-flex flex-wrap">
-                    {formData.besoinChantier.map((besoin, index) => (
-                        <div key={index} className="border p-4 m-2 d-flex justify-content-between position-relative">
-                            <div className="me-2">
-                                <div><strong>Spécialité :</strong> {besoin.speciality}</div>
-                                <div><strong>Nombre :</strong> {besoin.number}</div>
-                            </div>
-                            <button
-                                type="button"
-                                className="btn p-0 position-absolute top-0 end-0"
-                                style={{ width: "30px", height: "30px" }}
-                                onClick={() => handleRemoveBesoin(index)}
-                            >
-                                <FontAwesomeIcon icon={faTrash} />
-                            </button>
-                        </div>
-                    ))}
-                </div>
+                <h2>Besoins :</h2>
+                <BesoinChantier formData={formData} setFormData={setFormData} />
 
-                <BesoinChantier onAddBesoin={handleAddBesoin} />
 
                 <h2>Affecations :</h2>
-                <div className="d-flex flex-wrap">
-                    {formData.affectations.map((affectation, index) => (
-                        <div key={index} className="border p-4 m-2 d-flex justify-content-between position-relative">
-                            <div className="me-2">
-                                <div><strong>Employe :</strong>{affectation.name} ({affectation.specialite})</div>
-                            </div>
-                            <button
-                                type="button"
-                                className="btn p-0 position-absolute top-0 end-0"
-                                style={{ width: "30px", height: "30px" }}
-                                onClick={() => handleRemoveAffectation(index)}
-                            >
-                                <FontAwesomeIcon icon={faTrash} />
-                            </button>
-                        </div>
-                    ))}
-                </div>
-
-                <AffectationChantier onAddAffectation={handleAddAffectation} besoins={formData.besoinChantier} />
-
+                <AffectationChantier formData={formData} setFormData={setFormData} besoins={formData.besoinChantier} />
+                
                 <button disabled={isSubmitting} type="submit" className="btn btn-primary mt-3">
                     {isSubmitting ? "En cours..." : "Enregistrer"}
                 </button>

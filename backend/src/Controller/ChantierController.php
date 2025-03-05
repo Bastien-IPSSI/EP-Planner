@@ -55,7 +55,7 @@ final class ChantierController extends AbstractController
         ];
 
         foreach ($besoins as $besoin) {
-            $data['besoins'][] = [
+            $data['besoinChantier'][] = [
                 'id' => $besoin->getId(),
                 'nombre' => $besoin->getNombre(),
                 'specialite' => $besoin->getSpecialite()->getNom(),
@@ -107,6 +107,79 @@ final class ChantierController extends AbstractController
         return new JsonResponse($data);
     }
 
+    #[Route('/api/admin/chantier/{id}', name: 'api_admin_chantier_update', methods: ['PUT'])]
+    public function updateChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            return new JsonResponse(["error" => "Invalid JSON data"], 400);
+        }
+
+        $chantier = $entityManager->getRepository(Chantier::class)->find($request->get('id'));
+        if ($chantier === null) {
+            return new JsonResponse(["error" => "Chantier not found"], 404);
+        }
+
+        $entityManager->getConnection()->beginTransaction();
+        try {
+            // Mise à jour des informations du chantier
+            $chantier->setNom($data['nom']);
+            $chantier->setLieu($data['lieu']);
+            
+            $dateDebut = \DateTimeImmutable::createFromFormat('Y-m-d', $data['dateDebut']);
+            $dateFin = \DateTimeImmutable::createFromFormat('Y-m-d', $data['dateFin']);
+            
+            $chantier->setDateDebut($dateDebut);
+            $chantier->setDateFin($dateFin);
+            $chantier->setStatut($data['statut']);
+
+            // Mise à jour des assignations existantes en les passant à "Terminé" si elles ne sont pas présentes dans $data['affectations']
+            $existingAffectations = $entityManager->getRepository(Affectation::class)->findBy(['chantier' => $chantier]);
+            $affectationIds = array_map(fn($affectation) => $affectation['id'], $data['affectations'] ?? []);
+
+            foreach ($existingAffectations as $affectation) {
+                if (!in_array($affectation->getId(), $affectationIds)) {
+                    $affectation->setStatus('Termine');
+                    $entityManager->persist($affectation);
+                }
+            }
+
+            // Suppression des besoins existants
+            $existingBesoins = $entityManager->getRepository(BesoinChantier::class)->findBy(['chantier' => $chantier]);
+            foreach ($existingBesoins as $besoin) {
+                $entityManager->remove($besoin);
+            }
+
+            // Ajout des nouveaux besoins
+            foreach ($data['besoinChantier'] ?? [] as $besoinData) {
+                $besoinChantier = new BesoinChantier();
+                $specialite = $entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['specialite']]);
+                
+                if (!$specialite) {
+                    throw new \Exception("Spécialité '{$besoinData['specialite']}' non trouvée");
+                }
+
+                $besoinChantier->setSpecialite($specialite);
+                $besoinChantier->setNombre($besoinData['nombre']);
+                $besoinChantier->setChantier($chantier);
+
+                $entityManager->persist($besoinChantier);
+            }
+
+            $entityManager->flush();
+            $entityManager->getConnection()->commit();
+
+            return new JsonResponse([
+                "message" => "Chantier mis à jour avec succès!",
+                "id" => $chantier->getId()
+            ]);
+
+        } catch (\Exception $e) {
+            $entityManager->getConnection()->rollBack();
+            return new JsonResponse(["error" => "Une erreur est survenue : " . $e->getMessage()], 500);
+        }
+    }
+
 
     #[Route('/api/admin/chantier/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
     public function submitChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
@@ -135,9 +208,9 @@ final class ChantierController extends AbstractController
 
             foreach ($data['besoinChantier'] as $besoinData) {
                 $besoinChantier = new BesoinChantier();
-                $specialite = $entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['speciality']]);
+                $specialite = $entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['specialite']]);
                 $besoinChantier->setSpecialite($specialite);
-                $besoinChantier->setNombre($besoinData['number']);
+                $besoinChantier->setNombre($besoinData['nombre']);
                 $besoinChantier->setChantier($chantier);
 
                 $entityManager->persist($besoinChantier);

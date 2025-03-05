@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Spinner from "../../../Components/common/Spinner";
 
 function Chantiers() {
     const [chantiers, setChantiers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -15,17 +16,17 @@ function Chantiers() {
                 }
                 const data = await response.json();
                 setChantiers(data);
-                setLoading(false);
+                setIsLoading(false);
             } catch (error) {
                 setError(error.message);
-                setLoading(false);
+                setIsLoading(false);
             }
         };
 
         fetchChantiers();
     }, []);
 
-    if (loading) return <div className="container p-3">Chargement...</div>;
+    if (isLoading) return <Spinner />;
     if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
     
 
