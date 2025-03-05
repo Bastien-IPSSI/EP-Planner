@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useState } from 'react';
 function NavBar() {
-      const [isAdmin, setIsAdmin] = useState(false);
+      const [isAdmin, setIsAdmin] = useState(true);
       // Probablement a modifier avec le AuthContext
       const [currentUser, setCurrentUser] = useState("Jhon Doe")
     //   const [isLoggedIn, setIsLoggedIn] = useState(true);
