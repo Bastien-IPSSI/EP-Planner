@@ -1,4 +1,4 @@
-import ChantierForm from "../components/chantier/ChantierForm";
+import ChantierForm from "../Components/chantier/ChantierForm";
 
 const Chantier = () => {
     return (
