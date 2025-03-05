@@ -2,15 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\Employe;
+use App\Entity\Chantier;
+use App\Entity\BesoinChantier;
 use App\Entity\Affectation;
-use App\Repository\ChantierRepository;
+use App\Entity\Employe;
+use App\Entity\Specialite;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ChantierController extends AbstractController
+final class ChantierController extends AbstractController
 {
     private $entityManager;
 
@@ -19,24 +22,82 @@ class ChantierController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
+    #[Route('/api/admin/chantier/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
+    public function submitChantier(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if ($data === null) {
+            return new JsonResponse(["error" => "Invalid JSON data"], 400);
+        }
+
+        $this->entityManager->getConnection()->beginTransaction();
+        try {
+            $chantier = new Chantier();
+            $chantier->setNom($data['nom']);
+            $chantier->setLieu($data['lieu']);
+            
+            $dateDebut = \DateTimeImmutable::createFromFormat('Y-m-d', $data['dateDebut']);
+            $dateFin = \DateTimeImmutable::createFromFormat('Y-m-d', $data['dateFin']);
+            
+            $chantier->setDateDebut($dateDebut);
+            $chantier->setDateFin($dateFin);
+            $chantier->setStatut($data['statut']);
+
+            $this->entityManager->persist($chantier);
+            $this->entityManager->flush();
+
+            foreach ($data['besoinChantier'] as $besoinData) {
+                $besoinChantier = new BesoinChantier();
+                $specialite = $this->entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['speciality']]);
+                $besoinChantier->setSpecialite($specialite);
+                $besoinChantier->setNombre($besoinData['number']);
+                $besoinChantier->setChantier($chantier);
+
+                $this->entityManager->persist($besoinChantier);
+            }
+
+            foreach ($data['affectations'] as $affectationData) {
+                $employe = $this->entityManager->getRepository(Employe::class)->find($affectationData['id']);
+                if ($employe) {
+                    $affectation = new Affectation();
+                    $affectation->setEmploye($employe);
+                    $affectation->setChantier($chantier);
+                    $affectation->setDate(new \DateTimeImmutable());
+                    $affectation->setStatus("En cours");
+
+                    $this->entityManager->persist($affectation);
+                }
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+
+            return new JsonResponse(["message" => "Chantier et données associés sauvegardés avec succès!"]);
+        } catch (\Exception $e) {
+            $this->entityManager->getConnection()->rollBack();
+            return new JsonResponse(["error" => "Une erreur est survenue : " . $e->getMessage()], 500);
+        }
+    }
+
     #[Route('/api/employe/{id}/chantiers', name: 'api_employe_chantiers', methods: ['GET'])]
     public function getChantiersByEmploye($id): JsonResponse
     {
-        // Récupérer l'employé par son ID
+       
         $employe = $this->entityManager->getRepository(Employe::class)->find($id);
 
         if (!$employe) {
             return new JsonResponse(['error' => 'Employé non trouvé'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        // Récupérer les affectations de l'employé
+       
         $affectations = $this->entityManager->getRepository(Affectation::class)->findBy(['employe' => $employe]);
 
         if (empty($affectations)) {
             return new JsonResponse(['message' => 'Aucune affectation trouvée pour cet employé'], JsonResponse::HTTP_OK);
         }
 
-        // Récupérer les chantiers associés aux affectations
+      
         $chantiers = [];
         foreach ($affectations as $affectation) {
             $chantier = $affectation->getChantier();
