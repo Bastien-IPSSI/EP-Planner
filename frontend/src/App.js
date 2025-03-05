@@ -1,20 +1,5 @@
 
 import React from 'react';
-<<<<<<< HEAD
-import Chantier from './pages/chantier';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Employe from './pages/employe';
-
-const App = () => {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/employe" element={<Employe />} />
-        <Route path="/chantier" element={<Chantier/>}/>
-      </Routes>
-    </Router>
-    
-=======
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Login from './Components/Login';
@@ -130,7 +115,6 @@ const App = () => {
         </Routes>
       </BrowserRouter>
     </UserProvider>
->>>>>>> b674ca31ac183ecc96aa6fe014c90eabab0fa299
   );
 };
 
