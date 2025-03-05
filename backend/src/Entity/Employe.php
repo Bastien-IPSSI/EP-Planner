@@ -19,7 +19,7 @@ class Employe
     #[ORM\Column]
     private ?bool $dispo = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?array $skills = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

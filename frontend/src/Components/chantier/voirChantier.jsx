@@ -8,7 +8,6 @@ const VoirChantier = ({ employeId }) => {
   useEffect(() => {
     console.log(`Fetching chantiers for employeId: ${employeId}`);
 
-    // Appel à l'API pour récupérer les chantiers de l'employé
     fetch(`/api/employe/${employeId}/chantiers`)
       .then((response) => {
         if (!response.ok) {
@@ -19,11 +18,11 @@ const VoirChantier = ({ employeId }) => {
       .then((data) => {
         console.log('API Response:', data);
         if (data.message) {
-          setError(data.message); // Affichage du message d'erreur
+          setError(data.message);
         } else {
-          setChantiers(data); // Mise à jour des chantiers
+          setChantiers(data);
         }
-        setLoading(false); // Arrêt du chargement
+        setLoading(false);
       })
       .catch((error) => {
         console.error('Erreur:', error);
@@ -32,7 +31,6 @@ const VoirChantier = ({ employeId }) => {
       });
   }, [employeId]);
 
-  // Affichage pendant le chargement ou en cas d'erreur
   if (loading) return <div>Chargement des chantiers...</div>;
   if (error) return <div>{error}</div>;
 
@@ -44,7 +42,8 @@ const VoirChantier = ({ employeId }) => {
           <li key={chantier.id}>
             <strong>{chantier.nom}</strong> - {chantier.lieu} <br />
             📅 {chantier.date_debut} → {chantier.date_fin} <br />
-            🔵 Statut : {chantier.statut}
+            🔵 Statut : {chantier.statut} <br />
+            🔴 Affectation : {chantier.affectation_status}
           </li>
         ))}
       </ul>

@@ -3,40 +3,54 @@
 namespace App\Controller;
 
 use App\Entity\Employe;
+use App\Entity\Affectation;
 use App\Repository\ChantierRepository;
-use Doctrine\ORM\EntityManagerInterface; // Ajout de l'import pour EntityManagerInterface
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ChantierController extends AbstractController
 {
     private $entityManager;
 
-    // Injection de EntityManagerInterface dans le constructeur
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    public function getChantiersByEmploye($id, ChantierRepository $chantierRepository): JsonResponse
+    #[Route('/api/employe/{id}/chantiers', name: 'api_employe_chantiers', methods: ['GET'])]
+    public function getChantiersByEmploye($id): JsonResponse
     {
         // Récupérer l'employé par son ID
         $employe = $this->entityManager->getRepository(Employe::class)->find($id);
 
-        // Si l'employé n'existe pas, on retourne une erreur
         if (!$employe) {
             return new JsonResponse(['error' => 'Employé non trouvé'], JsonResponse::HTTP_NOT_FOUND);
         }
 
-        // Récupérer les chantiers associés à l'employé
-        $chantiers = $chantierRepository->findBy(['employe' => $id]);
+        // Récupérer les affectations de l'employé
+        $affectations = $this->entityManager->getRepository(Affectation::class)->findBy(['employe' => $employe]);
 
-        // Si aucun chantier n'est trouvé, on retourne un message vide
-        if (empty($chantiers)) {
-            return new JsonResponse(['message' => 'Aucun chantier trouvé pour cet employé'], JsonResponse::HTTP_OK);
+        if (empty($affectations)) {
+            return new JsonResponse(['message' => 'Aucune affectation trouvée pour cet employé'], JsonResponse::HTTP_OK);
         }
 
-        // Retourner les chantiers au format JSON
-        return $this->json($chantiers);
+        // Récupérer les chantiers associés aux affectations
+        $chantiers = [];
+        foreach ($affectations as $affectation) {
+            $chantier = $affectation->getChantier();
+            $chantiers[] = [
+                'id' => $chantier->getId(),
+                'nom' => $chantier->getNom(),
+                'lieu' => $chantier->getLieu(),
+                'date_debut' => $chantier->getDateDebut()->format('Y-m-d'),
+                'date_fin' => $chantier->getDateFin()->format('Y-m-d'),
+                'statut' => $chantier->getStatut(),
+                'affectation_status' => $affectation->getStatus(),
+            ];
+        }
+
+        return new JsonResponse($chantiers, JsonResponse::HTTP_OK);
     }
 }
