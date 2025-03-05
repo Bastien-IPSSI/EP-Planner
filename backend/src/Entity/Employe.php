@@ -19,8 +19,8 @@ class Employe
     #[ORM\Column]
     private ?bool $dispo = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $skills = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $skills = null; // Change to string instead of array
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
@@ -56,18 +56,19 @@ class Employe
         return $this;
     }
 
+    // Get skills as an array by decoding the JSON string
     public function getSkills(): ?array
     {
-        return $this->skills;
+        return $this->skills ? json_decode($this->skills, true) : null;
     }
-
+    
+    // Set skills as a JSON string
     public function setSkills(?array $skills): static
     {
-        $this->skills = $skills;
-
+        $this->skills = $skills ? json_encode($skills) : null; // Serialize array to JSON string
         return $this;
     }
-
+    
     public function getUser(): ?User
     {
         return $this->user;

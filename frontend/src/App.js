@@ -16,6 +16,8 @@ import OuvrierInfo from './Pages/admin/ouvriers/OuvrierInfo';
 import UserChantiers from './Pages/user/chantiers/UserChantiers';
 import UserChantier from './Pages/user/chantiers/UserChantier';
 
+import Employe from './Pages/user/chantiers/employe';
+
 import { UserProvider, useUser } from './UserContext';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
@@ -111,6 +113,7 @@ const App = () => {
                 </ProtectedRoute>
               }
               />
+              <Route path="/employe" element={<Employe />} />
           </Route>
         </Routes>
       </BrowserRouter>
