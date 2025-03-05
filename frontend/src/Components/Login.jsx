@@ -25,8 +25,6 @@ const Login = () => {
 
             const data = await response.json();
 
-            console.log(data);
-
             if (response.ok) {
                 login(data.user);
 
@@ -77,14 +75,6 @@ const Login = () => {
                                     className="btn btn-primary w-100"
                                 >
                                     Se connecter
-                                    {/* {isLoading ? (
-                                        <>
-                                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                                            Connexion en cours...
-                                        </>
-                                    ) : (
-                                        'Se connecter'
-                                    )} */}
                                 </button>
                             </form>
 

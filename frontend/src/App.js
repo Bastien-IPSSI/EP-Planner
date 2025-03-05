@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   const { user, isLoading } = useUser();
 
   if (isLoading) {
-    return <div>Chargement...</div>; // Ou un composant de chargement
+    return <div>Chargement...</div>
   }
 
   if (!user) {
