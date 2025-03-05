@@ -1,5 +1,5 @@
-controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+# config/routes.yaml
+
+api_employe_chantiers:
+  path: /api/employe/{id}/chantiers
+  controller: App\Controller\ChantierController::getChantiersByEmploye

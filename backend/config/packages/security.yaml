@@ -14,20 +14,17 @@ security:
             security: false
 
         api:
-            pattern: ^/api/login
-            stateless: true  # Important pour API (pas de session)
+            # Si tu veux l'API accessible sans authentification pour certaines routes
+            pattern: ^/api/
+            stateless: true  # Pas de session, stateless pour l'API
             provider: users_in_database
-            custom_authenticator: App\Security\LoginFormAuthenticator  # Remplace LoginFormAuthenticator
+            security: false  # Désactive l'authentification pour certaines routes, comme les "GET" publiques
 
         main:
             lazy: true
             provider: users_in_database
-            form_login:
-                login_path: app_login
-                check_path: app_login
-            logout:
-                path: app_logout
 
+    # Accès aux routes
     access_control:
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api, roles: ROLE_USER }
+        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }  # Permet l'accès anonyme à /api/login
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }          # Permet l'accès anonyme à toutes les routes sous /api
