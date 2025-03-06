@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Spinner from "../../../Components/common/Spinner";
+import { useUser } from '../../../UserContext';
 
 function ChantierInfo() {
     const { id } = useParams();
@@ -8,6 +9,7 @@ function ChantierInfo() {
     const [besoins, setBesoins] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { user } = useUser();
 
     useEffect(() => {
         const fetchChantierInfo = async () => {
@@ -53,13 +55,26 @@ function ChantierInfo() {
 
     return (
         <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
-            <div className="d-flex justify-content-between align-items-center mb-4">
-                <Link to="/admin/chantiers" className="btn btn-outline-primary">
-                    Retour aux chantiers
+            <div 
+                className="d-flex align-items-center mb-4" 
+                style={{ justifyContent: user.role === "ROLE_ADMIN" ? "space-between" : "flex-start" }}
+            >
+
+            {user.role === "ROLE_ADMIN" ? (
+                <>
+                    <Link to="/admin/chantiers" className="btn btn-outline-primary">
+                        Retour aux chantiers
+                    </Link>
+                    <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-primary">
+                        Modifier le chantier
+                    </Link>
+                </>
+            ) : (
+                <Link to="/chantiers" className="btn btn-outline-primary">
+                    Retour à mes chantiers
                 </Link>
-                <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-primary">
-                    Modifier le chantier
-                </Link>
+            )}
+
             </div>
             
             <div className="card shadow-sm">

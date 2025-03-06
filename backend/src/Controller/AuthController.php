@@ -43,6 +43,7 @@ class AuthController extends AbstractController
         if ($user->getEmploye() !== null) {
             $response['user']['employe_id'] = $user->getEmploye()->getId();
         }
+        
 
 
         return $this->json($response);
