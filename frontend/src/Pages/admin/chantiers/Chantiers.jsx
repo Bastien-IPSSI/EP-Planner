@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "../../../Components/common/Spinner";
 
 function Chantiers() {
     const [chantiers, setChantiers] = useState([]);
+    const [filteredChantiers, setFilteredChantiers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [selectedStatus, setSelectedStatus] = useState(""); // Filtre par statut
 
     useEffect(() => {
         const fetchChantiers = async () => {
@@ -15,6 +17,7 @@ function Chantiers() {
                 }
                 const data = await response.json();
                 setChantiers(data);
+                setFilteredChantiers(data);
                 setIsLoading(false);
             } catch (error) {
                 setIsLoading(false);
@@ -24,24 +27,44 @@ function Chantiers() {
         fetchChantiers();
     }, []);
 
+    const handleFilterChange = (event) => {
+        const status = event.target.value;
+        setSelectedStatus(status);
+
+        if (status === "") {
+            setFilteredChantiers(chantiers);
+        } else {
+            setFilteredChantiers(chantiers.filter((chantier) => chantier.statut === status));
+        }
+    };
+
     if (isLoading) return (
         <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
             <Spinner />
         </div>
     );
-    
 
-    return ( 
+    return (
         <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="mb-0">Liste des chantiers</h1>
+
                 <Link to="/admin/chantiers/new" className="btn btn-primary">
                     <i className="fas fa-plus me-2"></i>Nouveau chantier
                 </Link>
             </div>
 
+            <div className="mb-4">
+                <label className="form-label fw-bold">Filtrer par statut :</label>
+                <select className="form-select w-auto" value={selectedStatus} onChange={handleFilterChange}>
+                    <option value="">Tous les statuts</option>
+                    <option value="En cours">En cours</option>
+                    <option value="Termine">Terminé</option>
+                </select>
+            </div>
+
             <div className="row g-4">
-                {chantiers.map((chantier) => (
+                {filteredChantiers.map((chantier) => (
                     <div key={chantier.id} className="col-md-6 col-lg-4">
                         <Link to={`/chantiers/${chantier.id}`} className="text-decoration-none">
                             <div className="card h-100 shadow-sm hover-shadow transition">
@@ -73,7 +96,7 @@ function Chantiers() {
                     </div>
                 ))}
                 
-                {chantiers.length === 0 && (
+                {filteredChantiers.length === 0 && (
                     <div className="col-12 text-center py-5">
                         <p className="text-muted">Aucun chantier trouvé</p>
                     </div>

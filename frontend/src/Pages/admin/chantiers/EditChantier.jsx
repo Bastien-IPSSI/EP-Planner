@@ -132,7 +132,7 @@ function EditChantier() {
                                 onChange={handleChange}
                             >
                                 <option value="En cours">En cours</option>
-                                <option value="Terminé">Terminé</option>
+                                <option value="Termine">Terminé</option>
                             </select>
                         </div>
                     </div>

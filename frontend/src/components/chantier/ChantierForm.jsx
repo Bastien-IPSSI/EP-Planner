@@ -52,66 +52,64 @@ const ChantierForm = () => {
     };
 
     return (
-        <div className="container bg-white p-2 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
-            <form onSubmit={handleSubmit}>
-                <h1>Chantier :</h1>
+        <form onSubmit={handleSubmit}>
+            <h1>Chantier :</h1>
 
-                <div className="d-flex align-items-center">
-                    <label htmlFor="nom">Nom:</label>
-                    <input
-                        className="form-control m-2"
-                        type="text"
-                        name="nom"
-                        id="nom"
-                        value={formData.nom}
-                        onChange={handleChange}
-                    />
+            <div className="d-flex align-items-center">
+                <label htmlFor="nom">Nom:</label>
+                <input
+                    className="form-control m-2"
+                    type="text"
+                    name="nom"
+                    id="nom"
+                    value={formData.nom}
+                    onChange={handleChange}
+                />
 
-                    <label htmlFor="lieu">Lieu:</label>
-                    <input
-                        className="form-control m-2"
-                        type="text"
-                        name="lieu"
-                        id="lieu"
-                        value={formData.lieu}
-                        onChange={handleChange}
-                    />
-                </div>
+                <label htmlFor="lieu">Lieu:</label>
+                <input
+                    className="form-control m-2"
+                    type="text"
+                    name="lieu"
+                    id="lieu"
+                    value={formData.lieu}
+                    onChange={handleChange}
+                />
+            </div>
 
-                <div className="d-flex align-items-center">
-                    <label htmlFor="dateDebut">Du</label>
-                    <input
-                        className="form-control m-2"
-                        type="date"
-                        name="dateDebut"
-                        id="dateDebut"
-                        value={formData.dateDebut}
-                        onChange={handleChange}
-                    />
+            <div className="d-flex align-items-center">
+                <label htmlFor="dateDebut">Du</label>
+                <input
+                    className="form-control m-2"
+                    type="date"
+                    name="dateDebut"
+                    id="dateDebut"
+                    value={formData.dateDebut}
+                    onChange={handleChange}
+                />
 
-                    <label htmlFor="dateFin">Au</label>
-                    <input
-                        className="form-control m-2"
-                        type="date"
-                        name="dateFin"
-                        id="dateFin"
-                        value={formData.dateFin}
-                        onChange={handleChange}
-                    />
-                </div>
+                <label htmlFor="dateFin">Au</label>
+                <input
+                    className="form-control m-2"
+                    type="date"
+                    name="dateFin"
+                    id="dateFin"
+                    value={formData.dateFin}
+                    onChange={handleChange}
+                />
+            </div>
 
-                <h2>Besoins :</h2>
-                <BesoinChantier formData={formData} setFormData={setFormData} />
+            <h2>Besoins :</h2>
+            <BesoinChantier formData={formData} setFormData={setFormData} />
 
 
-                <h2>Affecations :</h2>
-                <AffectationChantier formData={formData} setFormData={setFormData} besoins={formData.besoinChantier} />
-                
-                <button disabled={isSubmitting} type="submit" className="btn btn-primary mt-3">
-                    {isSubmitting ? "En cours..." : "Enregistrer"}
-                </button>
-            </form>
-        </div>
+            <h2>Affecations :</h2>
+            <AffectationChantier formData={formData} setFormData={setFormData} besoins={formData.besoinChantier} />
+            
+            <button disabled={isSubmitting} type="submit" className="btn btn-primary mt-3">
+                {isSubmitting ? "En cours..." : "Enregistrer"}
+            </button>
+        </form>
     );
 };
 
