@@ -39,13 +39,13 @@ function Chantiers() {
     };
 
     if (isLoading) return (
-        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light d-flex justify-content-center align-items-center" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <Spinner />
         </div>
     );
 
     return (
-        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="mb-0">Liste des chantiers</h1>
 

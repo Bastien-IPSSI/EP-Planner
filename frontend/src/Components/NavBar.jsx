@@ -14,19 +14,24 @@ function NavBar() {
     };
 
     return (
-        <Navbar className="bg-body-tertiary fixed-top shadow-sm" style={{ height: '7vh'}}>
-           {user ? (
+        <Navbar 
+            expand="lg" 
+            className="navbar-dark bg-dark fixed-top shadow-lg" 
+            style={{ height: '9vh'}}
+        >
+            <Container>
+                {user ? (
                     user.role === 'ROLE_ADMIN' ? (
                         <Navbar.Brand href="/admin/chantiers">Nom de solution</Navbar.Brand>
                     ) : (
                         <Navbar.Brand href="/chantiers">Nom de solution</Navbar.Brand>
                     )
-                ) : null
-            }
-
-            <Container>
-                <Nav className="me-auto">
-                    { user ? (
+                ) : null}
+                
+                <Navbar.Toggle aria-controls="navbar-nav" />
+                <Navbar.Collapse id="navbar-nav">
+                    <Nav className="me-auto">
+                        { user ? (
                             user.role === 'ROLE_ADMIN' ? (
                                 <>
                                     <Nav.Link href="/admin/chantiers">Gérer les chantiers</Nav.Link>
@@ -38,13 +43,16 @@ function NavBar() {
                         ) : (
                             <Nav.Link href="/login">Se connecter</Nav.Link>
                         )
-                    }
-                </Nav>
-                {user && (
-                    <NavDropdown title={`${user.nom} ${user.prenom}`} className="justify-content-end">
-                        <NavDropdown.Item onClick={handleLogout}>Se déconnecter</NavDropdown.Item>
-                    </NavDropdown>
-                )}
+                        }
+                    </Nav>
+                    {user && (
+                        <Nav>
+                            <NavDropdown title={`${user.nom} ${user.prenom}`} id="nav-dropdown" align="end">
+                                <NavDropdown.Item onClick={handleLogout}>Se déconnecter</NavDropdown.Item>
+                            </NavDropdown>
+                        </Nav>
+                    )}
+                </Navbar.Collapse>
             </Container>
         </Navbar>
     );

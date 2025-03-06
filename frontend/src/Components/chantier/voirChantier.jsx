@@ -49,7 +49,7 @@ const VoirChantier = ({ employeId }) => {
 
   if (isLoading)
     return (
-      <div className="container p-4 bg-light min-vh-100" style={{ marginTop: "7vh" }}>
+      <div className="container p-4 bg-light d-flex justify-content-center align-items-center" style={{marginTop: "9vh", minHeight: "91vh"}}>
         <Spinner />
       </div>
     );
@@ -57,7 +57,7 @@ const VoirChantier = ({ employeId }) => {
   if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
-    <div className="container p-4 bg-light min-vh-100" style={{ marginTop: "7vh" }}>
+    <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
       <h2 className="mb-4">
         <i className="fas fa-city me-2"></i>Chantiers attribués
       </h2>

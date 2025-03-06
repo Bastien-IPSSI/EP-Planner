@@ -83,7 +83,7 @@ const fetchOuvrierInfo = async () => {
   if (!ouvrier) return <div className="container p-3">Ouvrier non trouvé</div>;
 
   return (
-    <div className="container p-4" style={{marginTop: "7vh"}}>
+    <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
       <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">
           <h2 className="mb-0">{ouvrier.prenom} {ouvrier.nom}</h2>
