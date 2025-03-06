@@ -5,7 +5,6 @@ import Spinner from "../../../Components/common/Spinner";
 function Chantiers() {
     const [chantiers, setChantiers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchChantiers = async () => {
@@ -18,7 +17,6 @@ function Chantiers() {
                 setChantiers(data);
                 setIsLoading(false);
             } catch (error) {
-                setError(error.message);
                 setIsLoading(false);
             }
         };
@@ -26,12 +24,15 @@ function Chantiers() {
         fetchChantiers();
     }, []);
 
-    if (isLoading) return <Spinner />;
-    if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
+    if (isLoading) return (
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+            <Spinner />
+        </div>
+    );
     
 
     return ( 
-        <div className="container p-4 bg-light min-vh-100">
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="mb-0">Liste des chantiers</h1>
                 <Link to="/admin/chantiers/new" className="btn btn-primary">

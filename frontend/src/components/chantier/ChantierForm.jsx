@@ -15,8 +15,6 @@ const ChantierForm = () => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupMessage, setPopupMessage] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -46,28 +44,15 @@ const ChantierForm = () => {
                 throw new Error(`Erreur HTTP: ${response.status}`);
             }
             navigate("/admin/chantiers");
-            // setPopupMessage("Chantier enregistré avec succès!");
-            // setShowPopup(true);
-            // setFormData({
-            //     nom: "",
-            //     lieu: "",
-            //     dateDebut: "",
-            //     dateFin: "",
-            //     statut: "En cours",
-            //     besoinChantier: [],
-            //     affectations: [],
-            // });
         } catch (error) {
             console.error("Erreur API :", error);
-            setPopupMessage("Une erreur est survenue lors de l'enregistrement du chantier.");
-            setShowPopup(true);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="container bg-white p-2 h-100 d-flex flex-column">
+        <div className="container bg-white p-2 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
             <form onSubmit={handleSubmit}>
                 <h1>Chantier :</h1>
 
@@ -126,21 +111,6 @@ const ChantierForm = () => {
                     {isSubmitting ? "En cours..." : "Enregistrer"}
                 </button>
             </form>
-            {showPopup && (
-                <div className="modal fade show d-block" tabIndex="-1">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Notification</h5>
-                                <button type="button" className="btn-close" onClick={() => setShowPopup(false)}></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>{popupMessage}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

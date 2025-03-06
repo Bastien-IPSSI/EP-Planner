@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useUser } from '../UserContext';
 
+
 function NavBar() {
     const { user, logout } = useUser();
 
@@ -12,8 +13,16 @@ function NavBar() {
     };
 
     return (
-        <Navbar className="bg-body-tertiary">
-            <Navbar.Brand href="/">Nom de solution</Navbar.Brand>
+        <Navbar className="bg-body-tertiary fixed-top shadow-sm" style={{ height: '7vh'}}>
+           {user ? (
+                    user.role === 'ROLE_ADMIN' ? (
+                        <Navbar.Brand href="/admin/chantiers">Nom de solution</Navbar.Brand>
+                    ) : (
+                        <Navbar.Brand href="/chantiers">Nom de solution</Navbar.Brand>
+                    )
+                ) : null
+            }
+
             <Container>
                 <Nav className="me-auto">
                     { user ? (

@@ -79,8 +79,8 @@ class AuthController extends AbstractController
         ];
 
         // add employe id to $user if has one
-        if ($user->getEmploye()) {
-            $response['employe_id'] = $user->getEmploye()->getId();
+        if ($user->getEmploye() !== null) {
+            $response['user']['employe_id'] = $user->getEmploye()->getId();
         }
 
 

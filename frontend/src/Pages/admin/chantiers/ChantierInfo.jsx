@@ -19,7 +19,6 @@ function ChantierInfo() {
                 const data = await response.json();
                 setChantier(data);
                 setIsLoading(false);
-                console.log(data);
             } catch (error) {
                 setError(error.message);
                 setIsLoading(false);
@@ -33,12 +32,9 @@ function ChantierInfo() {
                     throw new Error('Besoins non trouvés');
                 }
                 const data = await response.json();
-                console.log(data);
                 setBesoins(data);
-                setIsLoading(false);
             } catch (error) {
                 setError(error.message);
-                setIsLoading(false);
             }
         };
 
@@ -47,11 +43,16 @@ function ChantierInfo() {
     }, [id]);
 
 
-    if (isLoading) return <Spinner />;
+    if (isLoading) return (
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+            <Spinner />
+        </div>
+    );
+
     if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
 
     return (
-        <div className="container p-4 bg-light min-vh-100">
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to="/admin/chantiers" className="btn btn-outline-primary">
                     Retour aux chantiers

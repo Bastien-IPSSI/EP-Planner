@@ -29,7 +29,7 @@ const BesoinChantier = ({ formData, setFormData }) => {
                 ...prev,
                 besoinChantier: [...prev.besoinChantier, newBesoin]
             }));
-            setNewBesoin({ specialite: "", nombre: 1 }); // Reset form after adding
+            setNewBesoin({ specialite: "", nombre: 1 });
         }
     };
 
