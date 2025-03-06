@@ -51,7 +51,7 @@ function ChantierInfo() {
     if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
 
     return (
-        <div className="container p-4 bg-light min-vh-100">
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <Link to="/admin/chantiers" className="btn btn-outline-primary">
                     Retour aux chantiers

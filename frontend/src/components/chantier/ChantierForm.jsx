@@ -46,17 +46,6 @@ const ChantierForm = () => {
                 throw new Error(`Erreur HTTP: ${response.status}`);
             }
             navigate("/admin/chantiers");
-            // setPopupMessage("Chantier enregistré avec succès!");
-            // setShowPopup(true);
-            // setFormData({
-            //     nom: "",
-            //     lieu: "",
-            //     dateDebut: "",
-            //     dateFin: "",
-            //     statut: "En cours",
-            //     besoinChantier: [],
-            //     affectations: [],
-            // });
         } catch (error) {
             console.error("Erreur API :", error);
             setPopupMessage("Une erreur est survenue lors de l'enregistrement du chantier.");
@@ -67,7 +56,7 @@ const ChantierForm = () => {
     };
 
     return (
-        <div className="container bg-white p-2 h-100 d-flex flex-column">
+        <div className="container bg-white p-2 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
             <form onSubmit={handleSubmit}>
                 <h1>Chantier :</h1>
 

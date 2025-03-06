@@ -75,7 +75,7 @@ function EditChantier() {
     if (isLoading) return <Spinner />;
 
     return (
-        <div className="container bg-white p-4 h-100 d-flex flex-column">
+        <div className="container bg-white p-4 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
             <form onSubmit={handleSubmit} className="card">
                 <div className="card-body">
                     <h1 className="card-title mb-4">Modifier le chantier</h1>

@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function OuvrierForm() {
+  const [specialities, setSpecialities] = useState([]);
+  const navigate = useNavigate()
+
     const [ouvrier, setOuvrier] = useState({
         nom: '',
         prenom: '',
@@ -11,8 +15,18 @@ function OuvrierForm() {
         skills: []
     });
 
+    useEffect(() => {
+        fetch("http://localhost:8000/api/specialities")
+        .then((response) => response.json())
+        .then((data) => setSpecialities(data))
+        .catch((error) => console.error("Erreur API :", error));
+    
+      }, []);
     function submit(e){
-        e.preventDefault()
+        if (!ouvrier.nom || !ouvrier.prenom || !ouvrier.mail || !ouvrier.mdp || !ouvrier.role) {
+            alert("Veuillez remplir tous les champs obligatoires: Prenom, Nom, Mail, Mot de passe et role");
+            return;
+        }
         postData()
         
     }
@@ -38,7 +52,7 @@ function OuvrierForm() {
     }
 
     async function postData() {
-        const url = "http://localhost:8000/api/admin/ouvriers";
+        const url = "http://localhost:8000/api/admin/employes/create";
     
         try {
             const response = await fetch(url, {
@@ -56,6 +70,7 @@ function OuvrierForm() {
             }
     
             const data = await response.json();
+            navigate("/admin/ouvriers")
             console.log("data: ", data);
         } catch (error) {
             console.error("Erreur:", error);
@@ -71,43 +86,43 @@ function OuvrierForm() {
                 <div className="row mb-3">
                     <div className="col-md-6">
                         <label htmlFor="nom" >Nom :</label>
-                        <input type="text" className="form-control" name="nom" onChange={handleChange} value={ouvrier.nom} />
+                        <input type="text" required className="form-control" name="nom" onChange={handleChange} value={ouvrier.nom}/>
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="prenom" className="form-label">Prénom :</label>
-                        <input type="text" className="form-control" name="prenom" onChange={handleChange} value={ouvrier.prenom} />
+                        <input type="text" required className="form-control" name="prenom" onChange={handleChange} value={ouvrier.prenom} />
                     </div>
                 </div>
 
                 <div className="row mb-3">
                     <div className="col-md-6">
                         <label htmlFor="mail" className="form-label">Email :</label>
-                        <input type="email" className="form-control" name="mail" onChange={handleChange} value={ouvrier.mail} />
+                        <input type="email" required className="form-control" name="mail" onChange={handleChange} value={ouvrier.mail} />
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="mdp" className="form-label">Mot de passe :</label>
-                        <input type="password" className="form-control" name="mdp" onChange={handleChange} value={ouvrier.mdp} />
+                        <input type="password" required className="form-control" name="mdp" onChange={handleChange} value={ouvrier.mdp} />
                     </div>
                 </div>
 
                 <div className="row mb-3">
                     <div className="col-md-6">
                         <label htmlFor="role" className="form-label">Rôle :</label>
-                        <select className="form-select" name="role" onChange={handleChange} value={ouvrier.role}>
+                        <select className="form-select" name="role" required onChange={handleChange} value={ouvrier.role}>
                             <option value="">Sélectionner un rôle</option>
-                            <option value="admin">Admin</option>
-                            <option value="ouvrier">Ouvrier</option>
+                            <option value="ROLE_ADMIN">Admin</option>
+                            <option value="ROLE_USER">Ouvrier</option>
                         </select>
                     </div>
 
                     <div className="col-md-6">
                         <label htmlFor="specialite" className="form-label">Spécialité :</label>
                         <select className="form-select" name="specialite" onChange={handleChange} value={ouvrier.specialite}>
-                            <option value="">Sélectionner une spécialité</option>
-                            <option value="spe1">Spé 1</option>
-                            <option value="spe2">Spé 2</option>
+                        {specialities.map((specialite, index) => (
+                            <option key={index} value={specialite.id}>{specialite}</option>
+                        ))}
                         </select>
                     </div>
                 </div>

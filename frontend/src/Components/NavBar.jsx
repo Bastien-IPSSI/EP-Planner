@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useUser } from '../UserContext';
 
+
 function NavBar() {
     const { user, logout } = useUser();
 
@@ -12,7 +13,7 @@ function NavBar() {
     };
 
     return (
-        <Navbar className="bg-body-tertiary">
+        <Navbar className="bg-body-tertiary fixed-top shadow-sm" style={{ height: '7vh'}}>
             <Navbar.Brand href="/">Nom de solution</Navbar.Brand>
             <Container>
                 <Nav className="me-auto">
