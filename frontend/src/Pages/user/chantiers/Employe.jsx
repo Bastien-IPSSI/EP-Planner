@@ -8,7 +8,6 @@ const Employe = () => {
 
   return (
     <div>
-      <h1>Page de l'employé {employeId}</h1>
       <VoirChantier employeId={employeId} />
     </div>
   );

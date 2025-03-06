@@ -17,7 +17,7 @@ import OuvrierInfo from './Pages/admin/ouvriers/OuvrierInfo';
 import UserChantiers from './Pages/user/chantiers/UserChantiers';
 import UserChantier from './Pages/user/chantiers/UserChantier';
 
-import Employe from './Pages/user/chantiers/employe';
+import Employe from './Pages/user/chantiers/Employe';
 
 import { UserProvider, useUser } from './UserContext';
 
@@ -107,14 +107,6 @@ const App = () => {
 
             {/* Routes protégées pour UTILISATEUR (ouvrier) */}
             <Route
-              path='/chantiers'
-              element={
-                <ProtectedRoute requiredRole="ROLE_USER">
-                  <UserChantiers />
-                </ProtectedRoute>
-              }
-              />
-            <Route
               path='/chantiers/:id'
               element={
                 <ProtectedRoute requiredRole="ROLE_USER">
@@ -123,7 +115,7 @@ const App = () => {
               }
               />
               <Route 
-                path="/employe" 
+                path="/chantiers" 
                 element={
                   <ProtectedRoute requiredRole="ROLE_USER">
                     <Employe />
