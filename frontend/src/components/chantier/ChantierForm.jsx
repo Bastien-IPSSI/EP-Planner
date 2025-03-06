@@ -106,7 +106,7 @@ const ChantierForm = () => {
             <h2>Affecations :</h2>
             <AffectationChantier formData={formData} setFormData={setFormData} besoins={formData.besoinChantier} />
             
-            <button disabled={isSubmitting} type="submit" className="btn btn-primary mt-3">
+            <button disabled={isSubmitting} type="submit" className="btn btn-dark mt-3">
                 {isSubmitting ? "En cours..." : "Enregistrer"}
             </button>
         </form>

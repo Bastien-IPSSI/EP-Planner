@@ -49,7 +49,7 @@ function Chantiers() {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1 className="mb-0">Liste des chantiers</h1>
 
-                <Link to="/admin/chantiers/new" className="btn btn-primary">
+                <Link to="/admin/chantiers/new" className="btn btn-dark">
                     <i className="fas fa-plus me-2"></i>Nouveau chantier
                 </Link>
             </div>

@@ -62,10 +62,10 @@ function ChantierInfo() {
 
             {user.role === "ROLE_ADMIN" ? (
                 <>
-                    <Link to="/admin/chantiers" className="btn btn-outline-primary">
+                    <Link to="/admin/chantiers" className="btn btn-outline-dark">
                         Retour aux chantiers
                     </Link>
-                    <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-primary">
+                    <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-dark">
                         Modifier le chantier
                     </Link>
                 </>

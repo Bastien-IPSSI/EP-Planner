@@ -43,9 +43,9 @@ const Login = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6 col-lg-4">
+        <div className="bg-light min-vh-100 min-vw-100 d-flex align-items-center justify-content-center">
+            <div className="row justify-content-center w-50">
+                <div className="col-md-8 col-lg-8">
                     <div className="card">
                         <div className="card-body">
                             <h2 className="card-title text-center mb-4">Connexion</h2>
@@ -72,7 +72,7 @@ const Login = () => {
                                 </div>
                                 <button 
                                     type="submit" 
-                                    className="btn btn-primary w-100"
+                                    className="btn btn-dark w-100"
                                 >
                                     Se connecter
                                 </button>

@@ -155,7 +155,7 @@ function EditChantier() {
                         <button 
                             disabled={isSubmitting} 
                             type="submit" 
-                            className="btn btn-primary"
+                            className="btn btn-dark"
                         >
                             {isSubmitting ? (
                                 <>
