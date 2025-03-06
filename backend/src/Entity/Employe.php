@@ -19,10 +19,11 @@ class Employe
     #[ORM\Column]
     private ?bool $dispo = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $skills = null;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]  // Changement de ARRAY à TEXT
+    private ?string $skills = null;  // Changement de array à string
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", onDelete: "CASCADE")]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'employes')]
@@ -56,15 +57,18 @@ class Employe
         return $this;
     }
 
+    // Modification de la méthode getSkills
+    // Désérialisation JSON pour convertir la chaîne en tableau
     public function getSkills(): ?array
     {
-        return $this->skills;
+        return $this->skills ? json_decode($this->skills, true) : null;  // Désérialisation JSON
     }
 
+    // Modification de la méthode setSkills
+    // Sérialisation du tableau en chaîne JSON
     public function setSkills(?array $skills): static
     {
-        $this->skills = $skills;
-
+        $this->skills = $skills ? json_encode($skills) : null;  // Sérialisation en JSON
         return $this;
     }
 
