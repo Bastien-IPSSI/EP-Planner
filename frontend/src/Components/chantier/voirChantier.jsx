@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import Spinner from '../common/Spinner';
 
 const VoirChantier = ({ employeId }) => {
   const [chantiers, setChantiers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -23,21 +24,25 @@ const VoirChantier = ({ employeId }) => {
         } else {
           setChantiers(data);
         }
-        setLoading(false);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Erreur:', error);
         setError('Erreur lors de la récupération des chantiers');
-        setLoading(false);
+        setIsLoading(false);
       });
   }, [employeId]);
   
 
-  if (loading) return <div>Chargement des chantiers...</div>;
+  if (isLoading) return (
+    <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <Spinner />
+    </div>
+);
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
+    <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
       <h2>Chantiers attribués</h2>
       <ul>
         {chantiers.map((chantier) => (

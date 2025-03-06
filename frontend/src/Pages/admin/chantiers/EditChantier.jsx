@@ -18,7 +18,6 @@ function EditChantier() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchChantierData = async () => {
@@ -37,7 +36,7 @@ function EditChantier() {
                     dateFin: data.dateFin.split('T')[0]
                 });
             } catch (error) {
-                setError(error.message);
+                throw error;
             } finally {
                 setIsLoading(false);
             }
@@ -65,14 +64,17 @@ function EditChantier() {
             if (!response.ok) throw new Error('Erreur lors de la mise à jour');
             navigate(`/admin/chantiers/${id}`);
         } catch (error) {
-            setError(error.message);
+            throw error;
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
-    if (isLoading) return <Spinner />;
+    if (isLoading) return (
+        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+            <Spinner />
+        </div>
+    );
 
     return (
         <div className="container bg-white p-4 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
