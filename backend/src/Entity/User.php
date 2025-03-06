@@ -28,7 +28,7 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(mappedBy: "user", cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?Employe $employe = null;
 
     public function getId(): ?int

@@ -10,9 +10,9 @@ function NavBar() {
     //   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   return (
-    <Navbar className="bg-body-tertiary">
-      {<Navbar.Brand href="#home">Nom de solution</Navbar.Brand>}
+    <Navbar className="bg-body-tertiary fixed-top shadow-sm">
     <Container>
+      {<Navbar.Brand href="#home">Nom de solution</Navbar.Brand>}
     <Nav className="me-auto">
             {isAdmin
                 ?<Nav.Link href="/admin/chantiers">Gérer les chantiers</Nav.Link>
