@@ -10,7 +10,7 @@ function Chantiers() {
     useEffect(() => {
         const fetchChantiers = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/admin/chantier');
+                const response = await fetch('http://localhost:8000/api/admin/chantiers');
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des chantiers');
                 }

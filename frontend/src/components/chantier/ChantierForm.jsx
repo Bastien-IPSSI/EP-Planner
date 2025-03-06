@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BesoinChantier from "./BesoinChantier";
 import AffectationChantier from "./AffectationChantier";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ChantierForm = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const ChantierForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [popupMessage, setPopupMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -32,7 +34,7 @@ const ChantierForm = () => {
         try {
 
             console.log("formData: ", formData);
-            const response = await fetch("http://localhost:8000/api/admin/chantier/submit", {
+            const response = await fetch("http://localhost:8000/api/admin/chantiers/submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -43,18 +45,18 @@ const ChantierForm = () => {
             if (!response.ok) {
                 throw new Error(`Erreur HTTP: ${response.status}`);
             }
-
-            setPopupMessage("Chantier enregistré avec succès!");
-            setShowPopup(true);
-            setFormData({
-                nom: "",
-                lieu: "",
-                dateDebut: "",
-                dateFin: "",
-                statut: "En cours",
-                besoinChantier: [],
-                affectations: [],
-            });
+            navigate("/admin/chantiers");
+            // setPopupMessage("Chantier enregistré avec succès!");
+            // setShowPopup(true);
+            // setFormData({
+            //     nom: "",
+            //     lieu: "",
+            //     dateDebut: "",
+            //     dateFin: "",
+            //     statut: "En cours",
+            //     besoinChantier: [],
+            //     affectations: [],
+            // });
         } catch (error) {
             console.error("Erreur API :", error);
             setPopupMessage("Une erreur est survenue lors de l'enregistrement du chantier.");
@@ -111,20 +113,6 @@ const ChantierForm = () => {
                         value={formData.dateFin}
                         onChange={handleChange}
                     />
-                </div>
-
-                <div className="d-flex align-items-center">
-                    <label htmlFor="statut">Statut</label>
-                    <select
-                        className="form-control m-2"
-                        name="statut"
-                        id="statut"
-                        value={formData.statut}
-                        onChange={handleChange}
-                    >
-                        <option value="En cours">En cours</option>
-                        <option value="Terminé">Terminé</option>
-                    </select>
                 </div>
 
                 <h2>Besoins :</h2>

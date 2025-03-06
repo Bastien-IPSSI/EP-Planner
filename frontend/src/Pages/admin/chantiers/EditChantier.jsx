@@ -24,7 +24,7 @@ function EditChantier() {
         const fetchChantierData = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`http://localhost:8000/api/admin/chantier/${id}`);
+                const response = await fetch(`http://localhost:8000/api/admin/chantiers/${id}`);
                 if (!response.ok) throw new Error('Chantier non trouvé');
                 const data = await response.json();
 
@@ -57,7 +57,7 @@ function EditChantier() {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const response = await fetch(`http://localhost:8000/api/admin/chantier/${id}`, {
+            const response = await fetch(`http://localhost:8000/api/admin/chantiers/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData),

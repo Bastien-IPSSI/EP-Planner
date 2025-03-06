@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ChantierController extends AbstractController
 {
-    #[Route('/api/admin/chantier', name: 'api_admin_chantier', methods: ['GET'])]
+    #[Route('/api/admin/chantiers', name: 'api_admin_chantier', methods: ['GET'])]
     public function getChantier(EntityManagerInterface $entityManager): JsonResponse
     {
         $chantiers = $entityManager->getRepository(Chantier::class)->findAll();
@@ -34,7 +34,7 @@ final class ChantierController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/api/admin/chantier/{id}', name: 'api_admin_chantier_show', methods: ['GET'])]
+    #[Route('/api/admin/chantiers/{id}', name: 'api_admin_chantier_show', methods: ['GET'])]
     public function showChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $chantier = $entityManager->getRepository(Chantier::class)->find($request->get('id'));
@@ -74,7 +74,7 @@ final class ChantierController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/api/admin/chantier/{id}/besoins', name: 'api_admin_chantier_besoins', methods: ['GET'])]
+    #[Route('/api/admin/chantiers/{id}/besoins', name: 'api_admin_chantier_besoins', methods: ['GET'])]
     // Get all besoins for the chantier with id
     public function getBesoins(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
@@ -107,7 +107,7 @@ final class ChantierController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/api/admin/chantier/{id}', name: 'api_admin_chantier_update', methods: ['PUT'])]
+    #[Route('/api/admin/chantiers/{id}', name: 'api_admin_chantier_update', methods: ['PUT'])]
     public function updateChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -181,7 +181,7 @@ final class ChantierController extends AbstractController
     }
 
 
-    #[Route('/api/admin/chantier/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
+    #[Route('/api/admin/chantiers/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
     public function submitChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

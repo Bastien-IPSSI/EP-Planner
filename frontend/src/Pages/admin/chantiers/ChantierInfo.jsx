@@ -12,7 +12,7 @@ function ChantierInfo() {
     useEffect(() => {
         const fetchChantierInfo = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/admin/chantier/${id}`);
+                const response = await fetch(`http://localhost:8000/api/admin/chantiers/${id}`);
                 if (!response.ok) {
                     throw new Error('Chantier non trouvé');
                 }
@@ -28,7 +28,7 @@ function ChantierInfo() {
 
         const fetchBesoins = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/admin/chantier/${id}/besoins`);
+                const response = await fetch(`http://localhost:8000/api/admin/chantiers/${id}/besoins`);
                 if (!response.ok) {
                     throw new Error('Besoins non trouvés');
                 }
