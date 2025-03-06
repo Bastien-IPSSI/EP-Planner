@@ -29,6 +29,8 @@ class AuthController extends AbstractController
         $session->set('user_id', $user->getId());
 
         return $this->json(["user" => [
+                'id' => $user->getId(),
+                'employe_id' => $user->getEmploye()->getId(),
                 'mail' => $user->getMail(),
                 'nom' => $user->getNom(),
                 'prenom' => $user->getPrenom(),
@@ -58,6 +60,8 @@ class AuthController extends AbstractController
 
         $user = $userRepository->find($userId);
         return $this->json(["user" => [
+            'id' => $user->getId(),
+            'employe_id' => $user->getEmploye()->getId(), 
             'mail' => $user->getMail(),
             'nom' => $user->getNom(),
             'prenom' => $user->getPrenom(),

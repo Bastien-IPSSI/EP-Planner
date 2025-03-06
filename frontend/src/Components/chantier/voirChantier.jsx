@@ -46,7 +46,6 @@ const VoirChantier = ({ employeId }) => {
             📅 {chantier.date_debut} → {chantier.date_fin} <br />
             🔵 Statut : {chantier.statut} <br />
             🔴 Affectation : {chantier.affectation_status}
-            <button>Details TQT</button>
           </li>
         ))}
       </ul>

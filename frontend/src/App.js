@@ -8,6 +8,7 @@ import Layout from './Components/Layout';
 import Chantiers from './Pages/admin/chantiers/Chantiers';
 import CreateChantier from './Pages/admin/chantiers/CreateChantier';
 import ChantierInfo from './Pages/admin/chantiers/ChantierInfo';
+import EditChantier from './Pages/admin/chantiers/EditChantier';
 
 import Ouvriers from './Pages/admin/ouvriers/Ouvriers';
 import CreateOuvrier from './Pages/admin/ouvriers/CreateOuvrier';
@@ -69,7 +70,15 @@ const App = () => {
                   <ChantierInfo />
                 </ProtectedRoute>
               }
-              />
+            />
+            <Route
+              path='/admin/chantiers/:id/edit'
+              element={
+                <ProtectedRoute requiredRole="ROLE_ADMIN">
+                  <EditChantier />
+                </ProtectedRoute>
+              }
+            />
 
             <Route
               path='/admin/ouvriers'
@@ -113,7 +122,14 @@ const App = () => {
                 </ProtectedRoute>
               }
               />
-              <Route path="/employe" element={<Employe />} />
+              <Route 
+                path="/employe" 
+                element={
+                  <ProtectedRoute requiredRole="ROLE_USER">
+                    <Employe />
+                  </ProtectedRoute>
+                } 
+              />
           </Route>
         </Routes>
       </BrowserRouter>

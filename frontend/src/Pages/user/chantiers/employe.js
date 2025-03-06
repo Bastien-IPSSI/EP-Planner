@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import VoirChantier from '../../../Components/chantier/voirChantier';
+import { useUser } from '../../../UserContext';
 
 const Employe = () => {
-  const [employeId] = useState(1);
+  const { user } = useUser();
+  const [employeId] = useState(user.employe_id);
 
   return (
     <div>
