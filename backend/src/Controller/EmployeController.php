@@ -28,7 +28,7 @@ final class EmployeController extends AbstractController
         $user->setNom($data['nom']);
         $user->setPrenom($data['prenom']);
         $user->setMail($data['mail']);
-        $user->setMdp($data['mdp']);
+        $user->setPassword($data['mdp']);
         $user->setRole($data['role']);
 
         $employe = new Employe();

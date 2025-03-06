@@ -169,9 +169,9 @@ const fetchOuvrierInfo = async () => {
                 <Button variant="danger" onClick={() => removeSkill(index)}>X</Button>
               </div>
             ))}
-            <Button variant="outline-primary" className="mt-2" onClick={addSkill}>Ajouter une compétence</Button>
+            <Button variant="outline-primary" className="mt-3 mx-2" onClick={addSkill}>Ajouter une compétence</Button>
 
-            <Button className="mt-3" variant="success" onClick={handleSaveChanges}>Enregistrer</Button>
+            <Button className="mt-3 mx-2" variant="success" onClick={handleSaveChanges}>Enregistrer</Button>
           </Form>
         </Modal.Body>
       </Modal>
