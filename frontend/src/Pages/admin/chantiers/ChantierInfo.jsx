@@ -70,7 +70,7 @@ function ChantierInfo() {
                     </Link>
                 </>
             ) : (
-                <Link to="/chantiers" className="btn btn-outline-primary">
+                <Link to="/chantiers" className="btn btn-outline-dark">
                     Retour à mes chantiers
                 </Link>
             )}
