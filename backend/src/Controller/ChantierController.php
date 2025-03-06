@@ -15,8 +15,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class ChantierController extends AbstractController
 {
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    // Endpoint pour soumettre un chantier
     #[Route('/api/admin/chantier/submit', name: 'api_admin_chantier_submit', methods: ['POST'])]
-    public function submitChantier(EntityManagerInterface $entityManager, Request $request): JsonResponse
+    public function submitChantier(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -24,7 +32,7 @@ final class ChantierController extends AbstractController
             return new JsonResponse(["error" => "Invalid JSON data"], 400);
         }
 
-        $entityManager->getConnection()->beginTransaction();
+        $this->entityManager->getConnection()->beginTransaction();
         try {
             $chantier = new Chantier();
             $chantier->setNom($data['nom']);
@@ -37,21 +45,21 @@ final class ChantierController extends AbstractController
             $chantier->setDateFin($dateFin);
             $chantier->setStatut($data['statut']);
 
-            $entityManager->persist($chantier);
-            $entityManager->flush();
+            $this->entityManager->persist($chantier);
+            $this->entityManager->flush();
 
             foreach ($data['besoinChantier'] as $besoinData) {
                 $besoinChantier = new BesoinChantier();
-                $specialite = $entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['speciality']]);
+                $specialite = $this->entityManager->getRepository(Specialite::class)->findOneBy(['nom' => $besoinData['speciality']]);
                 $besoinChantier->setSpecialite($specialite);
                 $besoinChantier->setNombre($besoinData['number']);
                 $besoinChantier->setChantier($chantier);
 
-                $entityManager->persist($besoinChantier);
+                $this->entityManager->persist($besoinChantier);
             }
 
             foreach ($data['affectations'] as $affectationData) {
-                $employe = $entityManager->getRepository(Employe::class)->find($affectationData['id']);
+                $employe = $this->entityManager->getRepository(Employe::class)->find($affectationData['id']);
                 if ($employe) {
                     $affectation = new Affectation();
                     $affectation->setEmploye($employe);
@@ -59,17 +67,53 @@ final class ChantierController extends AbstractController
                     $affectation->setDate(new \DateTimeImmutable());
                     $affectation->setStatus("En cours");
 
-                    $entityManager->persist($affectation);
+                    $this->entityManager->persist($affectation);
                 }
             }
 
-            $entityManager->flush();
-            $entityManager->getConnection()->commit();
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
 
             return new JsonResponse(["message" => "Chantier et données associés sauvegardés avec succès!"]);
         } catch (\Exception $e) {
-            $entityManager->getConnection()->rollBack();
+            $this->entityManager->getConnection()->rollBack();
             return new JsonResponse(["error" => "Une erreur est survenue : " . $e->getMessage()], 500);
         }
+    }
+
+    // Endpoint pour récupérer les chantiers d'un employé
+    #[Route('/api/employe/{id}/chantiers', name: 'api_employe_chantiers', methods: ['GET'])]
+    public function getChantiersByEmploye($id): JsonResponse
+    {
+        // Récupérer l'employé par son ID
+        $employe = $this->entityManager->getRepository(Employe::class)->find($id);
+
+        if (!$employe) {
+            return new JsonResponse(['error' => 'Employé non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        // Récupérer les affectations de l'employé
+        $affectations = $this->entityManager->getRepository(Affectation::class)->findBy(['employe' => $employe]);
+
+        if (empty($affectations)) {
+            return new JsonResponse(['message' => 'Aucune affectation trouvée pour cet employé'], JsonResponse::HTTP_OK);
+        }
+
+        // Récupérer les chantiers associés aux affectations
+        $chantiers = [];
+        foreach ($affectations as $affectation) {
+            $chantier = $affectation->getChantier();
+            $chantiers[] = [
+                'id' => $chantier->getId(),
+                'nom' => $chantier->getNom(),
+                'lieu' => $chantier->getLieu(),
+                'date_debut' => $chantier->getDateDebut()->format('Y-m-d'),
+                'date_fin' => $chantier->getDateFin()->format('Y-m-d'),
+                'statut' => $chantier->getStatut(),
+                'affectation_status' => $affectation->getStatus(),
+            ];
+        }
+
+        return new JsonResponse($chantiers, JsonResponse::HTTP_OK);
     }
 }
