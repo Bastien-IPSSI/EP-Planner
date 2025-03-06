@@ -238,4 +238,36 @@ final class ChantierController extends AbstractController
             return new JsonResponse(["error" => "Une erreur est survenue : " . $e->getMessage()], 500);
         }
     }
+
+    #[Route('/api/employe/{id}/chantiers', name: 'api_employe_chantiers', methods: ['GET'])]
+    public function getChantiersByEmploye(EntityManagerInterface $entityManager,$id): JsonResponse
+    {
+        $employe = $entityManager->getRepository(Employe::class)->find($id);
+
+        if (!$employe) {
+            return new JsonResponse(['error' => 'Employé non trouvé'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $affectations = $entityManager->getRepository(Affectation::class)->findBy(['employe' => $employe]);
+
+        if (empty($affectations)) {
+            return new JsonResponse(['message' => 'Aucune affectation trouvée pour cet employé'], JsonResponse::HTTP_OK);
+        }
+
+        $chantiers = [];
+        foreach ($affectations as $affectation) {
+            $chantier = $affectation->getChantier();
+            $chantiers[] = [
+                'id' => $chantier->getId(),
+                'nom' => $chantier->getNom(),
+                'lieu' => $chantier->getLieu(),
+                'date_debut' => $chantier->getDateDebut()->format('Y-m-d'),
+                'date_fin' => $chantier->getDateFin()->format('Y-m-d'),
+                'statut' => $chantier->getStatut(),
+                'affectation_status' => $affectation->getStatus(),
+            ];
+        }
+
+        return new JsonResponse($chantiers, JsonResponse::HTTP_OK);
+    }
 }
