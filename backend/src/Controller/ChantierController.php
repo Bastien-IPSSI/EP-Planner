@@ -232,7 +232,7 @@ final class ChantierController extends AbstractController
             $entityManager->flush();
             $entityManager->getConnection()->commit();
 
-            return new JsonResponse(["message" => "Chantier et données associés sauvegardés avec succès!"]);
+            return new JsonResponse(["message" => "Chantier et donnees associes sauvegardes avec succes"]);
         } catch (\Exception $e) {
             $entityManager->getConnection()->rollBack();
             return new JsonResponse(["error" => "Une erreur est survenue : " . $e->getMessage()], 500);
