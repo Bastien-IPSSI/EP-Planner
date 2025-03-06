@@ -80,14 +80,14 @@ final class ChantierController extends AbstractController
     public function getBesoins(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $besoins = $entityManager->getRepository(BesoinChantier::class)->findBy(['chantier' => $request->get('id')]);
-        $affectation = $entityManager->getRepository(Affectation::class)->findBy(['chantier' => $request->get('id')]);
+        $affectations = $entityManager->getRepository(Affectation::class)->findBy(['chantier' => $request->get('id')]);
 
         $data = [];
 
         foreach ($besoins as $besoin) {
             $isAffected = false;
             $nbNeed = $besoin->getNombre();
-            foreach ($affectation as $affectation) {
+            foreach ($affectations as $affectation) {
                 if($affectation->getEmploye()->getSpecialite()->getNom() == $besoin->getSpecialite()->getNom()) {
                     $nbNeed -= 1;
                     if($nbNeed <= 0) {

@@ -24,7 +24,7 @@ function NavBar() {
                         <Navbar.Brand href="/admin/chantiers">
                             <img 
                                 src="Logo_Final.png" 
-                                alt="Logo" 
+                                alt="EP Planner" 
                                 style={{ height: '7vh' }}  
                             />
                         </Navbar.Brand>
@@ -32,7 +32,7 @@ function NavBar() {
                         <Navbar.Brand href="/chantiers">
                             <img 
                                 src="Logo_Final.png" 
-                                alt="Logo" 
+                                alt="EP Planner" 
                                 style={{ height: '7vh' }}  
                             />
                         </Navbar.Brand>
