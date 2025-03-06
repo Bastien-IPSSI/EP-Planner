@@ -12,7 +12,6 @@ function OuvrierArray() {
     fetch("http://localhost:8000/api/admin/employes")
       .then((response) => response.json())
       .then((data) => {
-        console.log("data : ", data);
         setEmployes(data);
         setIsLoading(false);
       })
@@ -21,7 +20,6 @@ function OuvrierArray() {
 
   function test(e) {
     const id = e.target.value;
-    console.log("allo", id);
 
     fetch(`http://localhost:8000/api/admin/employes/${id}`, { method: 'DELETE' })
       .then(response => {
