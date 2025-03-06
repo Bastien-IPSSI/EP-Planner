@@ -15,8 +15,6 @@ const ChantierForm = () => {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
-    const [popupMessage, setPopupMessage] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -48,8 +46,6 @@ const ChantierForm = () => {
             navigate("/admin/chantiers");
         } catch (error) {
             console.error("Erreur API :", error);
-            setPopupMessage("Une erreur est survenue lors de l'enregistrement du chantier.");
-            setShowPopup(true);
         } finally {
             setIsSubmitting(false);
         }
@@ -115,21 +111,6 @@ const ChantierForm = () => {
                     {isSubmitting ? "En cours..." : "Enregistrer"}
                 </button>
             </form>
-            {showPopup && (
-                <div className="modal fade show d-block" tabIndex="-1">
-                    <div className="modal-dialog modal-dialog-centered">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h5 className="modal-title">Notification</h5>
-                                <button type="button" className="btn-close" onClick={() => setShowPopup(false)}></button>
-                            </div>
-                            <div className="modal-body">
-                                <p>{popupMessage}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

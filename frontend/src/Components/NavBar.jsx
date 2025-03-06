@@ -14,7 +14,15 @@ function NavBar() {
 
     return (
         <Navbar className="bg-body-tertiary fixed-top shadow-sm" style={{ height: '7vh'}}>
-            <Navbar.Brand href="/">Nom de solution</Navbar.Brand>
+           {user ? (
+                    user.role === 'ROLE_ADMIN' ? (
+                        <Navbar.Brand href="/admin/chantiers">Nom de solution</Navbar.Brand>
+                    ) : (
+                        <Navbar.Brand href="/chantiers">Nom de solution</Navbar.Brand>
+                    )
+                ) : null
+            }
+
             <Container>
                 <Nav className="me-auto">
                     { user ? (

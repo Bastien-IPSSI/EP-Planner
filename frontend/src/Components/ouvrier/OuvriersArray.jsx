@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { Link } from "react-router-dom";
+import Spinner from "../common/Spinner";
 
 
 function OuvrierArray() {
   const [employes, setEmployes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/admin/employes")
@@ -12,6 +14,7 @@ function OuvrierArray() {
       .then((data) => {
         console.log("data : ", data);
         setEmployes(data);
+        setIsLoading(false);
       })
       .catch((error) => console.error("Erreur API :", error));
   }, []);
@@ -32,6 +35,10 @@ function OuvrierArray() {
       .catch(error => {
         console.error('Il y a eu une erreur !', error);
       });
+  }
+
+  if (isLoading) {
+    return <Spinner />;
   }
  
   return (
