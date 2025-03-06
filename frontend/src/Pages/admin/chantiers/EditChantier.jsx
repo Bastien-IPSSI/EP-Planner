@@ -71,13 +71,13 @@ function EditChantier() {
     };
 
     if (isLoading) return (
-        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light d-flex justify-content-center align-items-center" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <Spinner />
         </div>
     );
 
     return (
-        <div className="container bg-white p-4 h-100 d-flex flex-column" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <form onSubmit={handleSubmit} className="card">
                 <div className="card-body">
                     <h1 className="card-title mb-4">Modifier le chantier</h1>
@@ -132,7 +132,7 @@ function EditChantier() {
                                 onChange={handleChange}
                             >
                                 <option value="En cours">En cours</option>
-                                <option value="Terminé">Terminé</option>
+                                <option value="Termine">Terminé</option>
                             </select>
                         </div>
                     </div>
@@ -155,7 +155,7 @@ function EditChantier() {
                         <button 
                             disabled={isSubmitting} 
                             type="submit" 
-                            className="btn btn-primary"
+                            className="btn btn-dark"
                         >
                             {isSubmitting ? (
                                 <>

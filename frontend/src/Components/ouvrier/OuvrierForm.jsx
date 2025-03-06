@@ -139,7 +139,7 @@ function OuvrierForm() {
                             />
                         </div>
                     ))}
-                    <button type="button" className="btn btn-outline-primary" onClick={addSkill}>
+                    <button type="button" className="btn btn-outline-dark" onClick={addSkill}>
                         Ajouter une compétence
                     </button>
                 </div>

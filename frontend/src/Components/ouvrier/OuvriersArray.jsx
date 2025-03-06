@@ -59,7 +59,7 @@ function OuvrierArray() {
                 <span>{employe.role}</span>
                 <div className="btns">
                     <Link to={`/admin/ouvriers/${employe.id}`}>
-                        <button type="button" className="btn btn-primary mx-2">Gerer</button>
+                        <button type="button" className="btn btn-dark mx-2">Gerer</button>
                     </Link>
                     <button type="button" value={employe.id} className="btn btn-danger mx-2" onClick={test}>Suprimmer</button>
                 </div>
