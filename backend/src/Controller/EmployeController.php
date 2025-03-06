@@ -9,43 +9,48 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 
 final class EmployeController extends AbstractController
 {
-    #[Route('api/admin/employes/create', name: 'create_employe',  methods: ["POST"])]
-    public function createEmploye(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('api/admin/employes/create', name: 'create_employe', methods: ["POST"])]
+    public function createEmploye(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        dump($data);
+    
         if ($data === null) {
-            return new Response('Invalid JSON', 400);
+            return new JsonResponse(['error' => 'Invalid JSON'], 400);
         }
-
+    
         $user = new User();
         $user->setNom($data['nom']);
         $user->setPrenom($data['prenom']);
         $user->setMail($data['mail']);
-        $user->setPassword($data['mdp']);
+    
+        $hashedPassword = $passwordHasher->hashPassword($user, $data['mdp']);
+        $user->setPassword($hashedPassword);
+    
         $user->setRole($data['role']);
-
+    
         $employe = new Employe();
         $employe->setDispo(true);
         $employe->setSkills($data['skills']);
         $employe->setUser($user);
+    
         $entityManager->persist($employe);
-
         $user->setEmploye($employe);
         $entityManager->persist($user);
         $entityManager->flush();
-
-        return $this->json([
+    
+        return new JsonResponse([
             'message' => 'success',
-            'data reçu: ' => $data
+            'data' => $data
         ]);
     }
+    
 
     #[Route('/api/admin/employes', name: 'api_admin_employes', methods: ['GET'])]
     public function getAllemployeWithUsers(EntityManagerInterface $entityManager): JsonResponse
