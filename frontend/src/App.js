@@ -97,14 +97,6 @@ const App = () => {
               />
 
             {/* Routes protégées pour UTILISATEUR (ouvrier) */}
-            <Route
-              path='/chantiers/:id'
-              element={
-                <ProtectedRoute requiredRole="ROLE_USER">
-                  <ChantierInfo />
-                </ProtectedRoute>
-              }
-            />
               <Route 
                 path="/chantiers" 
                 element={
@@ -113,7 +105,14 @@ const App = () => {
                   </ProtectedRoute>
                 } 
               />
-          </Route>
+            {/* Routes non protégées */}
+              <Route
+                path='/chantiers/:id'
+                element={
+                  <ChantierInfo />
+                }
+                />
+            </Route>
         </Routes>
       </BrowserRouter>
     </UserProvider>

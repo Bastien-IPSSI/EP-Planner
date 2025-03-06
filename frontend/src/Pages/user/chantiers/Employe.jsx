@@ -4,7 +4,6 @@ import { useUser } from '../../../UserContext';
 
 const Employe = () => {
   const { user } = useUser();
-  console.log(user);
   const [employeId, setEmployeId] = useState(null);
 
   useEffect(() => {

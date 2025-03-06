@@ -43,7 +43,7 @@ function Chantiers() {
             <div className="row g-4">
                 {chantiers.map((chantier) => (
                     <div key={chantier.id} className="col-md-6 col-lg-4">
-                        <Link to={`/admin/chantiers/${chantier.id}`} className="text-decoration-none">
+                        <Link to={`/chantiers/${chantier.id}`} className="text-decoration-none">
                             <div className="card h-100 shadow-sm hover-shadow transition">
                                 <div className="card-body">
                                     <h5 className="card-title text-primary mb-3">{chantier.nom}</h5>
