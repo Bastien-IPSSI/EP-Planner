@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Spinner from '../common/Spinner';
 
 const VoirChantier = ({ employeId }) => {
   const [chantiers, setChantiers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(`Fetching chantiers for employeId: ${employeId}`);
   
     fetch(`http://localhost:8000/api/employe/${employeId}/chantiers`)  
       .then((response) => {
-        console.log('Response:', response);
         if (!response.ok) {
           throw new Error(`Erreur réseau ou serveur: ${response.status}`);
         }
         return response.json();
       })
       .then((data) => {
-        console.log('API Response:', data);
         if (data.message) {
           setError(data.message);
         } else {
@@ -32,27 +31,49 @@ const VoirChantier = ({ employeId }) => {
         setIsLoading(false);
       });
   }, [employeId]);
-  
 
   if (isLoading) return (
-    <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
-        <Spinner />
+    <div className="container p-4 bg-light min-vh-100" style={{ marginTop: "7vh" }}>
+      <Spinner />
     </div>
-);
-  if (error) return <div>{error}</div>;
+  );
+
+  if (error) return <div className="alert alert-danger">{error}</div>;
 
   return (
-    <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
-      <h2>Chantiers attribués</h2>
-      <ul>
+    <div className="container p-4 bg-light min-vh-100" style={{ marginTop: "7vh" }}>
+      <h2 className="mb-4">📋 Chantiers attribués</h2>
+
+      <div className="row">
         {chantiers.map((chantier) => (
-          <li key={chantier.id} onClick={() => window.location.href = `/chantiers/${chantier.id}`}>
-            <strong>{chantier.nom}</strong> - {chantier.lieu} <br />
-            📅 {chantier.date_debut} → {chantier.date_fin} <br />
-            🔴 Affectation : {chantier.affectation_status}
-          </li>
+          <div key={chantier.id} className="col-md-6 col-lg-4">
+            <div 
+              className="card shadow-sm p-3 mb-4 clickable-card"
+              onClick={() => navigate(`/chantiers/${chantier.id}`)}
+              style={{ cursor: 'pointer', transition: '0.3s' }}
+            >
+              <div className="card-body">
+                <h5 className="card-title">{chantier.nom}</h5>
+                
+                <p className="card-text">
+                  <i className="fas fa-map-marker-alt text-primary me-2"></i>
+                  {chantier.lieu}
+                </p>
+
+                <p className="card-text">
+                  <i className="fas fa-calendar-alt text-success me-2"></i>
+                  {new Date(chantier.date_debut).toLocaleDateString()} → {new Date(chantier.date_fin).toLocaleDateString()}
+                </p>
+
+                <p className="card-text">
+                  <i className="fas fa-exclamation-circle text-danger me-2"></i>
+                  Affectation : {chantier.affectation_status}
+                </p>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
