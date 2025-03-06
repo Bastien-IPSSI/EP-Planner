@@ -15,7 +15,7 @@ const AffectationChantier = ({ formData, setFormData, besoins }) => {
             .finally(() => setIsLoading(false));
     }, []);
 
-    const handleAdd = () => {
+    const handleAdd = () => {  
         if (!selectedEmploye) {
             alert("Veuillez sélectionner un employé !");
             return;
@@ -33,7 +33,7 @@ const AffectationChantier = ({ formData, setFormData, besoins }) => {
 
         const newAffectation = {
             id: employeData.id,
-            employe: `${employeData.user_name} ${employeData.user_prenom}`,
+            employe: `${employeData.nom} ${employeData.prenom}`,
             specialite: employeSpecialite,
         };
 
@@ -72,11 +72,11 @@ const AffectationChantier = ({ formData, setFormData, besoins }) => {
                                 <option key={index} value={JSON.stringify({
                                     "id": employe.id, 
                                     "specialite": employe.specialite, 
-                                    "user_name": employe.user_name, 
-                                    "user_prenom": employe.user_prenom
+                                    "nom": employe.nom, 
+                                    "prenom": employe.prenom
                                 })}
                                 >
-                                    {employe.user_name} {employe.user_prenom} ({employe.specialite})
+                                    {employe.nom} {employe.prenom} ({employe.specialite})
                                 </option>
                             ))}
                         </select>
@@ -84,7 +84,7 @@ const AffectationChantier = ({ formData, setFormData, besoins }) => {
                     <div className="col-md-3">
                         <button 
                             type="button" 
-                            className="btn btn-primary w-100"
+                            className="btn btn-dark w-100"
                             onClick={handleAdd}
                         >
                             Ajouter

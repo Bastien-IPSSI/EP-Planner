@@ -46,7 +46,7 @@ function ChantierInfo() {
 
 
     if (isLoading) return (
-        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <Spinner />
         </div>
     );
@@ -54,7 +54,7 @@ function ChantierInfo() {
     if (error) return <div className="container p-3 text-danger">Erreur: {error}</div>;
 
     return (
-        <div className="container p-4 bg-light min-vh-100" style={{marginTop: "7vh"}}>
+        <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
             <div 
                 className="d-flex align-items-center mb-4" 
                 style={{ justifyContent: user.role === "ROLE_ADMIN" ? "space-between" : "flex-start" }}
@@ -62,15 +62,15 @@ function ChantierInfo() {
 
             {user.role === "ROLE_ADMIN" ? (
                 <>
-                    <Link to="/admin/chantiers" className="btn btn-outline-primary">
+                    <Link to="/admin/chantiers" className="btn btn-outline-dark">
                         Retour aux chantiers
                     </Link>
-                    <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-primary">
+                    <Link to={`/admin/chantiers/${id}/edit`} className="btn btn-dark">
                         Modifier le chantier
                     </Link>
                 </>
             ) : (
-                <Link to="/chantiers" className="btn btn-outline-primary">
+                <Link to="/chantiers" className="btn btn-outline-dark">
                     Retour à mes chantiers
                 </Link>
             )}
@@ -99,7 +99,7 @@ function ChantierInfo() {
                                 <dd className="col-sm-8">
                                     <span className={`badge ${
                                         chantier.statut === 'En cours' ? 'bg-success' :
-                                        chantier.statut === 'Termine' ? 'bg-warning' :
+                                        chantier.statut === 'Termine' ? 'bg-danger' :
                                         'bg-secondary'
                                     }`}>
                                         {chantier.statut}

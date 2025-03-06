@@ -83,7 +83,7 @@ const fetchOuvrierInfo = async () => {
   if (!ouvrier) return <div className="container p-3">Ouvrier non trouvé</div>;
 
   return (
-    <div className="container p-4" style={{marginTop: "7vh"}}>
+    <div className="container p-4 bg-light" style={{marginTop: "9vh", minHeight: "91vh"}}>
       <div className="card">
         <div className="card-header d-flex justify-content-between align-items-center bg-primary text-white">
           <h2 className="mb-0">{ouvrier.prenom} {ouvrier.nom}</h2>
@@ -169,7 +169,7 @@ const fetchOuvrierInfo = async () => {
                 <Button variant="danger" onClick={() => removeSkill(index)}>X</Button>
               </div>
             ))}
-            <Button variant="outline-primary" className="mt-3 mx-2" onClick={addSkill}>Ajouter une compétence</Button>
+            <Button variant="outline-dark" className="mt-3 mx-2" onClick={addSkill}>Ajouter une compétence</Button>
 
             <Button className="mt-3 mx-2" variant="success" onClick={handleSaveChanges}>Enregistrer</Button>
           </Form>
