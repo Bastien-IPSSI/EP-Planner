@@ -62,7 +62,7 @@ function EditChantier() {
                 body: JSON.stringify(formData),
             });
             if (!response.ok) throw new Error('Erreur lors de la mise à jour');
-            navigate(`/admin/chantiers/${id}`);
+            navigate(`/chantiers/${id}`);
         } catch (error) {
             throw error;
         } finally {

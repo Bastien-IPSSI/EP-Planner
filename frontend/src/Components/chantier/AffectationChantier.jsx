@@ -32,7 +32,7 @@ const AffectationChantier = ({ formData, setFormData, besoins }) => {
         }
 
         const newAffectation = {
-            id: employeData.id,
+            employe_id: employeData.id,
             employe: `${employeData.nom} ${employeData.prenom}`,
             specialite: employeSpecialite,
         };

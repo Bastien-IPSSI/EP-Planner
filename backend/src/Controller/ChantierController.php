@@ -65,6 +65,7 @@ final class ChantierController extends AbstractController
         foreach ($affectations as $affectation) {
             $data['affectations'][] = [
                 'id' => $affectation->getId(),
+                'employe_id' => $affectation->getEmploye()->getId(),
                 'employe' => $affectation->getEmploye()->getUser()->getNom() . ' ' . $affectation->getEmploye()->getUser()->getPrenom(),
                 'specialite' => $affectation->getEmploye()->getSpecialite()->getNom(),
                 'statut' => $affectation->getStatus(),
@@ -89,7 +90,7 @@ final class ChantierController extends AbstractController
             foreach ($affectation as $affectation) {
                 if($affectation->getEmploye()->getSpecialite()->getNom() == $besoin->getSpecialite()->getNom()) {
                     $nbNeed -= 1;
-                    if($nbNeed == 0) {
+                    if($nbNeed <= 0) {
                         $isAffected = true;
                     }
                 }
@@ -133,13 +134,22 @@ final class ChantierController extends AbstractController
             $chantier->setDateFin($dateFin);
             $chantier->setStatut($data['statut']);
 
-            // Mise à jour des assignations existantes en les passant à "Terminé" si elles ne sont pas présentes dans $data['affectations']
-            $existingAffectations = $entityManager->getRepository(Affectation::class)->findBy(['chantier' => $chantier]);
-            $affectationIds = array_map(fn($affectation) => $affectation['id'], $data['affectations'] ?? []);
 
+            // Suppression des affectations existantes
+            $existingAffectations = $entityManager->getRepository(Affectation::class)->findBy(['chantier' => $chantier]);
             foreach ($existingAffectations as $affectation) {
-                if (!in_array($affectation->getId(), $affectationIds)) {
-                    $affectation->setStatus('Termine');
+                $entityManager->remove($affectation);
+            }
+
+            foreach ($data['affectations'] as $affectationData) {
+                $employe = $entityManager->getRepository(Employe::class)->find($affectationData['employe_id']);
+                if ($employe) {
+                    $affectation = new Affectation();
+                    $affectation->setEmploye($employe);
+                    $affectation->setChantier($chantier);
+                    $affectation->setDate(new \DateTimeImmutable());
+                    $affectation->setStatus("En cours");
+
                     $entityManager->persist($affectation);
                 }
             }
@@ -217,7 +227,7 @@ final class ChantierController extends AbstractController
             }
 
             foreach ($data['affectations'] as $affectationData) {
-                $employe = $entityManager->getRepository(Employe::class)->find($affectationData['id']);
+                $employe = $entityManager->getRepository(Employe::class)->find($affectationData['employe_id']);
                 if ($employe) {
                     $affectation = new Affectation();
                     $affectation->setEmploye($employe);
