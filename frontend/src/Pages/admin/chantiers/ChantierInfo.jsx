@@ -99,7 +99,7 @@ function ChantierInfo() {
                                 <dd className="col-sm-8">
                                     <span className={`badge ${
                                         chantier.statut === 'En cours' ? 'bg-success' :
-                                        chantier.statut === 'Termine' ? 'bg-warning' :
+                                        chantier.statut === 'Termine' ? 'bg-danger' :
                                         'bg-secondary'
                                     }`}>
                                         {chantier.statut}

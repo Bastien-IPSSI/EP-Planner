@@ -69,7 +69,7 @@ function Chantiers() {
                         <Link to={`/chantiers/${chantier.id}`} className="text-decoration-none">
                             <div className="card h-100 shadow-sm hover-shadow transition">
                                 <div className="card-body">
-                                    <h5 className="card-title text-primary mb-3">{chantier.nom}</h5>
+                                    <h5 className="card-title text-grey fw-bold mb-3">{chantier.nom}</h5>
                                     <div className="mb-2">
                                         <i className="fas fa-map-marker-alt me-2 text-secondary"></i>
                                         {chantier.lieu}
@@ -81,7 +81,7 @@ function Chantiers() {
                                     <div>
                                         <span className={`badge ${
                                             chantier.statut === 'En cours' ? 'bg-success' :
-                                            chantier.statut === 'À venir' ? 'bg-warning' :
+                                            chantier.statut === 'Termine' ? 'bg-danger' :
                                             'bg-secondary'
                                         }`}>
                                             {chantier.statut}
