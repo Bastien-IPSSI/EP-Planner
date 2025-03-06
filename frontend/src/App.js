@@ -64,14 +64,6 @@ const App = () => {
               }
             />
             <Route
-              path='/admin/chantiers/:id'
-              element={
-                <ProtectedRoute requiredRole="ROLE_ADMIN">
-                  <ChantierInfo />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path='/admin/chantiers/:id/edit'
               element={
                 <ProtectedRoute requiredRole="ROLE_ADMIN">
@@ -110,10 +102,10 @@ const App = () => {
               path='/chantiers/:id'
               element={
                 <ProtectedRoute requiredRole="ROLE_USER">
-                  <UserChantier />
+                  <ChantierInfo />
                 </ProtectedRoute>
               }
-              />
+            />
               <Route 
                 path="/chantiers" 
                 element={

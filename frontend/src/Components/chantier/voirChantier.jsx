@@ -41,10 +41,9 @@ const VoirChantier = ({ employeId }) => {
       <h2>Chantiers attribués</h2>
       <ul>
         {chantiers.map((chantier) => (
-          <li key={chantier.id}>
+          <li key={chantier.id} onClick={() => window.location.href = `/chantiers/${chantier.id}`}>
             <strong>{chantier.nom}</strong> - {chantier.lieu} <br />
             📅 {chantier.date_debut} → {chantier.date_fin} <br />
-            🔵 Statut : {chantier.statut} <br />
             🔴 Affectation : {chantier.affectation_status}
           </li>
         ))}
