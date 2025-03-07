@@ -21,3 +21,4 @@ DATABASE_URL="mysql://user:password@127.0.0.1:3306/database_name"
 1. Installez les dépendances : npm install
 
 2. Démarrez l'application : npm start
+3. Aller sur la route depsuis l'url: /login
